@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jxyd.nole.web.image.oracle.alpha.mapper.EnterpriseListMappex">
+
+    <resultMap id="BaseResultMap" type="com.jxyd.nole.web.image.oracle.alpha.model.EnterpriseListView">
+        <id column="CS200_ID" jdbcType="DECIMAL" property="cs200Id" />
+        <result column="STATUS" jdbcType="VARCHAR" property="status" />
+        <result column="COMPANY_NAME" jdbcType="VARCHAR" property="companyName" />
+        <result column="COMPANY_LOGINUSER" jdbcType="VARCHAR" property="companyLoginuser" />
+        <result column="COMPANY_OWN" jdbcType="VARCHAR" property="companyOwn" />
+        <result column="COMPANY_PIC_PATH" jdbcType="VARCHAR" property="companyPicPath" />
+        <result column="PURCHASE_TOTAL_AMOUNT" jdbcType="DECIMAL" property="purchaseTotalAmount" />
+        <result column="PURCHASE_TOTAL_SHARE" jdbcType="DECIMAL" property="purchaseTotalShare" />
+        <result column="ADVERTISEMENT_NUM" jdbcType="DECIMAL" property="advertisementNum" />
+        <result column="SURPLUS_DISPLAY" jdbcType="VARCHAR" property="surplusDisplay" />
+        <result column="ALREADY_DISPLAY" jdbcType="DECIMAL" property="alreadyDisplay" />
+        <result column="TITLE" jdbcType="VARCHAR" property="title" />
+        <result column="GMT_CREATE" jdbcType="TIMESTAMP" property="gmtCreate" />
+        <result column="CONF_COUNT" jdbcType="DECIMAL" property="confCount" />
+        <result column="PAYMONEY" jdbcType="DECIMAL" property="paymoney" />
+    </resultMap>
+    
+    
+    <update id="enterpriseAdvOperation" parameterType="com.jxyd.nole.web.image.oracle.alpha.model.EnterpriseListParam">
+    	UPDATE CS201_ADVERTISMENT SET GMT_UPDATE = SYSDATE , DISPLAY_STATUS = 'OFFLINE'  WHERE CS200_ID = #{cs200Id}
+    </update>
+    
+    <select id="enterpriseList" parameterType="com.jxyd.nole.web.image.oracle.alpha.model.EnterpriseListParam" resultMap="BaseResultMap">
+    	SELECT 
+		c.CS200_ID,c.STATUS,c.COMPANY_NAME,c.COMPANY_LOGINUSER,c.COMPANY_OWN,c.COMPANY_PIC_PATH,b.PURCHASE_TOTAL_AMOUNT,b.PURCHASE_TOTAL_SHARE,e.ADVERTISEMENT_NUM,e.SURPLUS_DISPLAY,(b.PURCHASE_TOTAL_SHARE-e.SURPLUS_DISPLAY) as ALREADY_DISPLAY
+		FROM CS200_COMPANY c
+		LEFT JOIN ( SELECT t.CS200_ID,SUM(PAYMONEY) AS PURCHASE_TOTAL_AMOUNT,SUM(CONF_COUNT) AS PURCHASE_TOTAL_SHARE FROM (SELECT o.CS200_ID,o.PAYMONEY,d.CONF_COUNT FROM CS202_COMPANY_ORDER o LEFT JOIN CS203_ADVSYSCONF d ON o.CS203_ID = d.CS203_ID WHERE O.ORDERSTATUS = 'ORDER_PAYED' ) t GROUP BY t.CS200_ID ) b
+		ON c.CS200_ID = b.CS200_ID
+		LEFT JOIN  (SELECT CS200_ID,COUNT(CS200_ID) AS ADVERTISEMENT_NUM ,SUM(AVAILABLE_TIMES) AS SURPLUS_DISPLAY FROM CS201_ADVERTISMENT WHERE STATUS = 'CHECKED_PASS' GROUP BY CS200_ID) e
+		ON c.CS200_ID = e.CS200_ID
+		
+		WHERE c.OFFICIAL =  'OTHOR_COMPANY' AND c.CHECK_STATUS = 'CHECKED_PASS'
+
+			<if test="companyLoginuser != null and companyLoginuser !=''">
+				AND c.COMPANY_LOGINUSER = #{companyLoginuser}
+			</if>
+			<if test="status != null and status !=''">
+				AND c.STATUS = #{status}
+			</if>
+			<if test="minPurchase != null and minPurchase !=''">
+				AND b.PURCHASE_TOTAL_SHARE > #{minPurchase}
+			</if>
+			<if test="maxPurchase != null and maxPurchase !=''">
+				AND b.PURCHASE_TOTAL_SHARE &lt; #{maxPurchase}
+			</if>
+			<if test="minSurplusDisplay != null and minSurplusDisplay !=''">
+				AND e.SURPLUS_DISPLAY > #{minSurplusDisplay}
+			</if>
+			<if test="maxSurplusDisplay != null and maxSurplusDisplay !=''">
+				AND e.SURPLUS_DISPLAY &lt; #{maxSurplusDisplay}
+			</if>
+			<if test="minAdvNum != null and minAdvNum !=''">
+				AND e.ADVERTISEMENT_NUM > #{minAdvNum}
+			</if>
+			<if test="maxAdvNum != null and maxAdvNum !=''">
+				AND e.ADVERTISEMENT_NUM &lt; #{maxAdvNum}
+			</if>
+			<if test="minAlreadyDisplay != null and minAlreadyDisplay !=''">
+				AND (b.PURCHASE_TOTAL_SHARE-e.SURPLUS_DISPLAY) > #{minAlreadyDisplay}
+			</if>
+			<if test="maxAlreadyDisplay != null and maxAlreadyDisplay !=''">
+				AND (b.PURCHASE_TOTAL_SHARE-e.SURPLUS_DISPLAY) &lt; #{maxAlreadyDisplay}
+			</if>
+    	
+    	ORDER BY c.GMT_CREATE DESC
+    </select>
+    
+    
+    
+    <update id="enterpriseStatusOperation" parameterType="com.jxyd.nole.web.image.oracle.alpha.model.EnterpriseListParam">
+    	UPDATE CS200_COMPANY SET GMT_UPDATE = SYSDATE,STATUS = #{status} WHERE CS200_ID = #{cs200Id}
+    </update>
+    
+    
+    <select id="enterprisePurchaseRecord" parameterType="com.jxyd.nole.web.image.oracle.alpha.model.EnterpriseListParam" resultMap="BaseResultMap">
+    	SELECT o.PAYMONEY,o.GMT_CREATE,a.TITLE,c.CONF_COUNT FROM CS202_COMPANY_ORDER o
+    	LEFT JOIN CS201_ADVERTISMENT a ON o.CS201_ID = a.CS201_ID
+    	LEFT JOIN CS203_ADVSYSCONF c ON o.CS203_ID = c.CS203_ID
+    	WHERE o.CS200_ID = #{cs200Id}
+    	<if test="beginDate != null and beginDate !=''">
+    		AND o.GMT_CREATE > TO_DATE(#{beginDate},'yyyy-MM-dd HH24:mi:ss')
+    	</if>
+    	<if test="endDate != null and endDate != ''">
+    		AND o.GMT_CREATE &lt; TO_DATE(#{endDate},'yyyy-MM-dd HH24:mi:ss')
+    	</if>
+    </select>
+    
+
+</mapper>

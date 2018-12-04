@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jxyd.nole.web.ms.cook.mapper.Sys02RoleMappex">
+  <resultMap id="BaseResultMap" type="com.jxyd.nole.jpa.mysql.alpha.raw.model.Sys02Role">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="role" jdbcType="VARCHAR" property="role" />
+    <result column="is_available" jdbcType="INTEGER" property="isAvailable" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <resultMap id="resultMap" type="com.jxyd.nole.web.ms.cook.model.Role">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="role" jdbcType="VARCHAR" property="role" />
+    <result column="is_available" jdbcType="INTEGER" property="isAvailable" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    
+    <result column="permission_cnt" jdbcType="INTEGER" property="permissionCnt" />
+  </resultMap>
+  
+  <select id="selectRoleListWithRowbounds" parameterType="java.util.Map" resultMap="resultMap">
+	SELECT
+		sys02.id,
+		sys02.role,
+		sys02.is_available,
+		sys02.create_time,
+		CASE WHEN sys01.id IS NULL THEN 0 ELSE sum(sys01.is_vein) END AS permission_cnt
+	FROM
+		sys02_role sys02
+	LEFT JOIN sys03_role_permission_link sys03 ON sys02.id = sys03.role_id
+	LEFT JOIN sys01_permission sys01 ON sys03.permission_id = sys01.id 
+	<where>
+		<if test="role != null">
+        	sys02.role LIKE CONCAT('%', #{role,jdbcType=VARCHAR}, '%')
+		</if>
+	</where>
+	GROUP BY id
+  </select>
+  
+  <select id="countRoleList" parameterType="java.util.Map" resultType="java.lang.Integer">
+	SELECT count(1) FROM sys02_role sys02
+	<where>
+		<if test="role != null">
+        	sys02.role LIKE CONCAT('%', #{role,jdbcType=VARCHAR}, '%')
+		</if>
+	</where>
+  </select>
+  
+  <select id="selectRoleArray" parameterType="java.lang.Integer" resultType="java.util.Map">
+	SELECT
+		r.id,
+		r.role,
+		CASE WHEN url.user_id IS NOT NULL THEN 1 ELSE 0 END AS checked
+	FROM
+		sys02_role r
+	LEFT JOIN sys05_user_role_link url ON r.id = url.role_id
+	AND url.user_id = #{userId,jdbcType=INTEGER}
+	order by r.id asc
+  </select>
+</mapper>

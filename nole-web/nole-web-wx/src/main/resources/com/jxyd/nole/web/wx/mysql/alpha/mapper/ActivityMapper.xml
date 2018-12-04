@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jxyd.nole.web.wx.mysql.alpha.mapper.ActivityMapper">
+  
+  <resultMap id="ActivityType" type="com.jxyd.nole.web.wx.dto.ActivityType">
+    <result column="nole300_id" property="id" jdbcType="DECIMAL" />
+    <result column="activity_type" property="type" jdbcType="VARCHAR" />
+    <result column="checked" property="checked" jdbcType="VARCHAR" />
+    <result column="model_code" property="modelCode" jdbcType="DECIMAL" />
+  </resultMap>
+   
+  <resultMap id="Hot" type="com.jxyd.nole.web.wx.dto.HotActivityStandard" >
+    <result column="nole301_id" property="activityId" jdbcType="DECIMAL" />
+    <result column="view_no" property="viewNo" jdbcType="DECIMAL" />
+    <result column="apply_no" property="applyNo" jdbcType="DECIMAL" />
+    <result column="date_end" property="dateEnd" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <resultMap id="ActivityCover" type="com.jxyd.nole.web.wx.dto.ActivityCover" >
+    <result column="nole301_id" property="id" jdbcType="DECIMAL" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="pic_path" property="coverPicPath" jdbcType="VARCHAR" />
+    <result column="apply_no" property="applyCount" jdbcType="DECIMAL" />
+    <result column="activity_subject" property="title" jdbcType="VARCHAR" />
+    <result column="activity_start" property="date" jdbcType="TIMESTAMP" />
+    <result column="nickname" property="leaderNickname" jdbcType="VARCHAR" />
+    <result column="wx_avatar_url" property="leaderHeaderPic" jdbcType="VARCHAR" />
+    <result column="verified_or_not" property="leaderStatus" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="ActivityVersion" type="com.jxyd.nole.web.wx.dto.ActivityVersion" >
+    <result column="nole304_id" property="versionId" jdbcType="DECIMAL" />
+    <result column="activity_subject" property="title" jdbcType="VARCHAR" />
+    <result column="activity_start" property="activityStart" jdbcType="VARCHAR" />
+    <result column="activity_end" property="activityEnd" jdbcType="VARCHAR" />
+    <result column="gather_time" property="gatherTime" jdbcType="VARCHAR" />
+    <result column="gather_point" property="gatherPoint" jdbcType="VARCHAR" />
+    <result column="front_money" property="frontMoney" jdbcType="VARCHAR" />
+    <result column="hand_down" property="signEnd" jdbcType="VARCHAR" />
+    <result column="frequency_band" property="channel" jdbcType="VARCHAR" />
+    <result column="max_no" property="maxNo" jdbcType="DECIMAL" />
+    <result column="apply_no" property="applyNo" jdbcType="DECIMAL" />
+    <result column="max_no" property="maxCarNo" jdbcType="VARCHAR" />
+    <result column="max_no" property="maxPeopleNo" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="CarCondition" type="com.jxyd.nole.web.wx.dto.CarCondition">
+  	<result column="nole015_id" property="id" jdbcType="DECIMAL" />
+    <result column="car" property="car" jdbcType="VARCHAR" />
+    <result column="checked" property="checked" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="EquipCondition" type="com.jxyd.nole.web.wx.dto.EquipCondition">
+  	<result column="nole016_id" property="id" jdbcType="DECIMAL" />
+    <result column="equitment" property="equitment" jdbcType="VARCHAR" />
+    <result column="checked" property="checked" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="Schedule" type="com.jxyd.nole.web.wx.dto.Schedule">
+  	<result column="nole305_id" property="id" jdbcType="DECIMAL" />
+    <result column="daynum" property="day" jdbcType="DECIMAL" />
+    <result column="destination" property="destination" jdbcType="VARCHAR" />
+    <result column="description" property="desc" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="Seen" type="com.jxyd.nole.web.wx.dto.Seen">
+    <result column="wx_nick_name" property="nickname" jdbcType="VARCHAR" />
+    <result column="wx_avatar_url" property="headerPic" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="Signed" type="com.jxyd.nole.web.wx.dto.Signed">
+    <result column="wx_nick_name" property="nickname" jdbcType="VARCHAR" />
+    <result column="wx_avatar_url" property="headerPic" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="Leave" type="com.jxyd.nole.web.wx.dto.Leave" >
+	<result  column="talkId" property="talkId" jdbcType="DECIMAL"  />
+	<result  column="activityId" property="activityId" jdbcType="VARCHAR"  />
+	<result  column="leftnickname" property="leftnickname" jdbcType="VARCHAR"  />
+	<result  column="beleftnickname" property="beleftnickname" jdbcType="VARCHAR"  />
+	<result  column="content" property="content" jdbcType="VARCHAR"  />
+	<result  column="pic" property="pic" jdbcType="VARCHAR"  />
+	<result  column="date" property="date" jdbcType="VARCHAR"  />
+  </resultMap>
+  
+  <select id="selectActivityTypeByLineId" resultMap="ActivityType" parameterType="java.util.Map">
+  	SELECT
+		t.nole300_id,
+		t.activity_type,
+		t.model_code
+	FROM
+		nole402_fit f
+	LEFT JOIN nole300_activity_type t ON t.nole300_id = f.nole300_id
+	WHERE
+		f.nole400_id = #{lineId,jdbcType=DECIMAL}
+  </select>
+  
+  <!-- 活动所属类型 -->
+  <select id="selectActivityTypeByActivityId"  resultMap="ActivityType" parameterType="java.util.Map">
+  	SELECT
+		t.nole300_id,
+		t.activity_type,
+		t.model_code,
+		CASE WHEN a.nole301_id IS NULL THEN '0' ELSE '1' END AS checked
+	FROM
+		nole300_activity_type t
+	LEFT JOIN nole301_activity a on t.nole300_id = a.nole300_id and a.nole301_id = #{activityId,jdbcType=DECIMAL}
+  </select>
+  
+  
+  <!--   用户喜欢的活动类型 -->
+  <select id="selectActivityTypeByUserId"  resultMap="ActivityType" parameterType="java.util.Map">
+  	SELECT
+		t.nole300_id,
+		t.activity_type,
+		t.model_code,
+		CASE WHEN f.nole200_id IS NULL THEN '0' ELSE '1' END AS checked
+	FROM
+		nole300_activity_type t
+	LEFT JOIN nole205_favorate_label f ON t.nole300_id = f.nole300_id
+	AND f.nole200_id = #{userId,jdbcType=DECIMAL}
+  </select>
+
+  <select id="selectActivityType"  resultMap="ActivityType">
+  	SELECT
+		t.nole300_id,
+		t.activity_type,
+		t.model_code
+	FROM
+		nole300_activity_type t
+  </select>
+  
+  <select id="selectHotList" resultMap="Hot">
+  	SELECT
+		*
+	FROM
+		(
+			SELECT
+				a.nole301_id,
+				(SELECT count(*) FROM nole202_footprint f WHERE f.nole301_id = a.nole301_id ) AS view_no,
+				(SELECT count(*) FROM nole309_activity_apply p WHERE p.nole301_id = a.nole301_id ) AS apply_no,
+				(SELECT v.hand_down FROM nole304_activity_version v WHERE v.nole301_id = a.nole301_id AND v.available_or_not = 'Y' ) AS end_date,
+				(select s.`status` from nole302_activity_status s where s.nole301_id = a.nole301_id and s.available_or_not = 'Y') as activity_status
+			FROM
+				nole301_activity a 
+		) m
+	where m.activity_status = '报名开始'
+	ORDER BY
+		m.view_no DESC,
+		m.apply_no DESC,
+		m.end_date DESC
+  </select>
+  
+  
+  <sql id="ActivityCoverSQL">
+  	SELECT
+		a.nole301_id,
+		p.pic_path,
+		s.`status`,
+		v.activity_subject,
+		DATE_FORMAT(v.activity_start,'%Y-%m-%d') as activity_start,
+		u.wx_avatar_url,
+		u.nickname,
+		(select count(*) from nole309_activity_apply apply where apply.nole301_id = a.nole301_id) as apply_no,
+		u.verified_or_not
+	FROM
+		nole301_activity a
+	LEFT JOIN nole303_activity_pic p ON a.nole301_id = p.nole301_id AND p.pic_type = 'COVER'
+	LEFT JOIN nole302_activity_status s ON a.nole301_id = s.nole301_id AND s.available_or_not = 'Y'
+	LEFT JOIN nole304_activity_version v ON a.nole301_id = v.nole301_id AND v.available_or_not = 'Y'
+	LEFT JOIN nole300_activity_type y on a.nole300_id = y.nole300_id
+	LEFT JOIN nole200_user u ON a.nole200_id = u.nole200_id
+  </sql>
+  <select id="selectActivityCoverById" resultMap="ActivityCover" parameterType="java.util.Map">
+	<include refid="ActivityCoverSQL"></include>
+	 where a.nole301_id = #{id,jdbcType=DECIMAL}
+  </select>
+  <select id="selectActivityCoverByTypeId" resultMap="ActivityCover" parameterType="java.util.Map">
+	<include refid="ActivityCoverSQL"></include>
+	 where y.nole300_id = #{typeId,jdbcType=DECIMAL}
+  </select>
+  <select id="selectActivityCoverForUser" resultMap="ActivityCover" parameterType="java.util.Map">
+	<include refid="ActivityCoverSQL"></include>
+	<where>
+	 <if test="userId != null">and u.nole200_id = #{userId,jdbcType=DECIMAL}</if>
+	 <if test="typeId != null">and y.nole300_id = #{typeId,jdbcType=DECIMAL}</if>
+	</where>
+  </select>
+  <select id="selectActivityCoverByTypeIds" resultMap="ActivityCover" parameterType="java.util.Map">
+	<include refid="ActivityCoverSQL"></include>
+	 where 
+	 <if test="typeIds != null and typeIds.size() > 0">
+	 y.nole300_id in <foreach collection="typeIds" item="typeId" open="(" separator="," close=")" >#{typeId}</foreach>
+	 </if>
+	 <if test="typeIds == null or typeIds.size() == 0">
+	 	1 > 2
+	 </if>
+  </select>
+  
+  <select id="selectActivityVersionByActivityId" resultMap="ActivityVersion">
+  	SELECT
+		nole304_id,
+		nole301_id,
+		activity_subject,
+		DATE_FORMAT(v.activity_start,'%Y-%m-%d') as activity_start,
+		DATE_FORMAT(v.activity_end,'%Y-%m-%d') as activity_end,
+		gather_point,
+		DATE_FORMAT(v.gather_time,'%Y-%m-%d') as gather_time,
+		frequency_band,
+		apply_no,
+		max_no,
+		front_money,
+		hand_down,
+		hand_up
+	FROM
+		nole304_activity_version v where  v.available_or_not = 'Y' and v.nole301_id = #{activityId,jdbcType=DECIMAL}
+  </select>
+  
+  <select id="selectCarConditionByVersionId" resultMap="CarCondition" parameterType="java.util.Map">
+  	SELECT
+		c.nole015_id,
+		c.car,
+	  CASE WHEN rec.nole311_id IS NULL THEN '0' ELSE '1' END AS checked
+	FROM
+		nole015_car c
+	LEFT JOIN nole311_recommend_car rec ON c.nole015_id = rec.nole015_id
+	AND rec.nole304_id = #{versionId,jdbcType=DECIMAL}
+  </select>
+  
+  <select id="selectEquipConditionByVersionId" resultMap="EquipCondition" parameterType="java.util.Map">
+  	SELECT
+		e.nole016_id,
+		e.equitment,
+		CASE WHEN rec.nole312_id IS NULL THEN '0' ELSE '1' END AS checked
+	FROM
+		nole016_equitment e
+	LEFT JOIN nole312_recommend_equip rec ON e.nole016_id = rec.nole016_id AND rec.nole304_id = #{versionId,jdbcType=DECIMAL}
+	WHERE
+		e.nole200_id IS NULL
+	UNION ALL
+	SELECT
+		e.nole016_id,
+		e.equitment,
+		CASE WHEN rec.nole312_id IS NULL THEN '0' ELSE '1' END AS checked
+	FROM
+		nole016_equitment e
+	LEFT JOIN nole312_recommend_equip rec ON e.nole016_id = rec.nole016_id AND rec.nole304_id = #{versionId,jdbcType=DECIMAL}
+	WHERE
+		e.nole200_id = #{userId,jdbcType=DECIMAL}
+  </select>
+  
+  <select id="selectScheduleByVersionId" resultMap="Schedule" parameterType="java.util.Map">
+  	SELECT
+		destination,
+		daynum,
+		nole305_id,
+		description
+	FROM
+		nole305_activity_schedule s
+	WHERE
+		s.nole304_id = #{versionId,jdbcType=DECIMAL}
+  </select>
+  
+  <select id="selectSeenByActivityId"  resultMap="Seen" parameterType="java.util.Map">
+  	SELECT
+		u.wx_nick_name,
+		u.wx_avatar_url
+	FROM
+		nole202_footprint f
+	LEFT JOIN nole200_user u ON f.nole200_id = u.nole200_id
+	WHERE
+		f.nole301_id = #{activityId,jdbcType=DECIMAL}
+	ORDER BY
+		f.gmt_create DESC
+  </select>
+  
+  <select id="selectActivityStatus" resultType="java.lang.String" parameterType="java.util.Map">
+  	SELECT
+		s.`status`
+	FROM
+		nole302_activity_status s
+	WHERE
+		s.nole301_id = #{activityId,jdbcType=DECIMAL}
+	AND s.`status` = 'Y'
+  </select>
+  
+  <update id="updateApplayNo" parameterType="java.util.Map">
+  	UPDATE nole304_activity_version v
+	SET v.apply_no = v.apply_no + 1
+	WHERE
+		v.nole301_id = #{activityId,jdbcType=DECIMAL}
+	AND v.max_no > v.apply_no
+  </update>
+  
+  <select id="selectApplyByActivityId" parameterType="java.util.Map" resultMap="Signed">
+  	SELECT
+		u.wx_nick_name,
+		u.wx_avatar_url
+	FROM
+		nole309_activity_apply a
+	LEFT JOIN nole200_user u ON a.nole200_id = u.nole200_id
+	WHERE
+		a.nole301_id = #{activityId,jdbcType=DECIMAL}
+	ORDER BY
+		a.gmt_create asc
+  </select>
+  
+  <select id="selectActivityLeaveMsg" resultMap="Leave" parameterType="java.util.Map">
+  	SELECT
+		t.nole301_id as activityId,
+		u.nickname as leftnickname,
+		t.nole203_id as talkId,
+		u2.nickname as beleftnickname,
+		t.content as content,
+		t.path as pic,
+		DATE_FORMAT(t.gmt_create,'%Y-%m-%d %H:%i') as date,
+		t.type
+	FROM
+		nole203_talk t
+	LEFT JOIN nole200_user u ON t.nole200_id = u.nole200_id
+	LEFT JOIN nole203_talk t2 ON t.nole203_pid = t2.nole203_id
+	LEFT JOIN nole200_user u2 ON t2.nole200_id = u2.nole200_id
+	where t.nole301_id = #{activityId,jdbcType=DECIMAL}
+	order by t.gmt_create desc
+  </select>
+</mapper>

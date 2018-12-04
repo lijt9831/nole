@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.jxyd.nole.web.ms.cook.mapper.Sys01PermissionMappex">
+  
+  <resultMap id="MainConfigMap" type="com.jxyd.nole.web.ms.cook.model.Menu">
+  <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="pid" jdbcType="INTEGER" property="pid" />
+    <result column="is_tree" jdbcType="INTEGER" property="isTree" />
+    <result column="is_branch" jdbcType="INTEGER" property="isBranch" />
+    <result column="is_leaf" jdbcType="INTEGER" property="isLeaf" />
+    <result column="is_vein" jdbcType="INTEGER" property="isVein" />
+    <result column="is_vein_main" jdbcType="INTEGER" property="isVeinMain" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="level" jdbcType="INTEGER" property="level" />
+    <result column="order" jdbcType="INTEGER" property="order" />
+    <result column="is_collapsed" jdbcType="INTEGER" property="isCollapsed" />
+    <result column="icon" jdbcType="VARCHAR" property="icon" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    
+    <result column="is_checked" jdbcType="INTEGER" property="isChecked" />
+  </resultMap>
+  
+  <select id="selectMainConfig" parameterType="java.util.Map" resultMap="MainConfigMap">
+	SELECT DISTINCT
+		p.id,
+		p.pid,
+		p.is_tree,
+		p.is_branch,
+		p.is_leaf,
+		p.is_vein,
+		p.is_vein_main,
+		p.`NAME`,
+		p.`LEVEL`,
+		p.is_collapsed,
+		p.icon
+	FROM
+		sys01_permission p
+	LEFT JOIN sys03_role_permission_link rpl ON p.id = rpl.permission_id
+	LEFT JOIN sys05_user_role_link url ON rpl.role_id = url.role_id
+	LEFT JOIN sys04_user u ON url.user_id = u.id
+	WHERE
+		u.username = #{username,jdbcType=VARCHAR} or p.is_vein = 0
+	ORDER BY
+		p.`level` ASC,
+		p.`order` ASC,
+		p.create_time ASC
+  </select>
+  
+    <select id="selectPermissionConfig" parameterType="java.util.Map" resultMap="MainConfigMap">
+	SELECT
+		p.id,
+		p.pid,
+		p.is_tree,
+		p.is_branch,
+		p.is_leaf,
+		p.is_vein,
+		p.is_vein_main,
+		p.`NAME`,
+		p.`LEVEL`,
+		p.is_collapsed,
+		p.icon,
+		CASE WHEN rpl.role_id IS NULL THEN 0 ELSE 1 END AS 'is_checked'
+	FROM
+		sys01_permission p
+	LEFT JOIN sys03_role_permission_link rpl ON p.id = rpl.permission_id AND rpl.role_id = #{roleId,jdbcType=INTEGER}
+	ORDER BY
+		`level` ASC,
+		`order` ASC,
+		create_time ASC
+  </select>
+</mapper>

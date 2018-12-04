@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jxyd.nole.web.image.oracle.alpha.mapper.EnterpriseOfficialMappex">
+
+    <resultMap id="BaseResultMap" type="com.jxyd.nole.web.image.oracle.alpha.model.EnterpriseOfficialView">
+        <id column="CS200_ID" jdbcType="DECIMAL" property="cs200Id" />
+        <result column="COMPANY_LOGINUSER" jdbcType="VARCHAR" property="companyLoginuser" />
+        <result column="OFFICIAL" jdbcType="VARCHAR" property="official" /> 
+        <result column="NOTE" jdbcType="VARCHAR" property="note" /> 
+        <result column="GMT_CREATE" jdbcType="TIMESTAMP" property="gmtCreate" />
+        <result column="CS204_ID" jdbcType="DECIMAL" property="cs204Id" />
+        <result column="STATUS" jdbcType="VARCHAR" property="status" /> 
+    </resultMap>
+    
+    <select id="enterpriseOfficialList" parameterType="com.jxyd.nole.web.image.oracle.alpha.model.EnterpriseOfficialParam" resultMap="BaseResultMap">
+    	SELECT STATUS,CS200_ID,COMPANY_LOGINUSER,OFFICIAL,NOTE,GMT_CREATE FROM CS200_COMPANY WHERE OFFICIAL = 'GROUP_COMPANY'
+    		<if test="companyLoginuser != null and companyLoginuser !=''">
+    			AND COMPANY_LOGINUSER = #{companyLoginuser}
+    		</if>
+    	ORDER BY GMT_CREATE DESC
+    </select>
+    
+    
+    <update id="enterpriseOfficialOperation" parameterType="com.jxyd.nole.web.image.oracle.alpha.model.EnterpriseOfficialParam">
+    	UPDATE CS200_COMPANY SET OFFICIAL = #{official} ,GMT_UPDATE = SYSDATE  WHERE CS200_ID = #{cs200Id}
+    </update>
+    
+    
+    <select id="enterpriseAppointAccount" parameterType="com.jxyd.nole.web.image.oracle.alpha.model.EnterpriseOfficialParam" resultMap="BaseResultMap">
+    	SELECT STATUS,CS200_ID,COMPANY_LOGINUSER,OFFICIAL,NOTE,GMT_CREATE FROM CS200_COMPANY WHERE OFFICIAL = 'OTHOR_COMPANY' AND COMPANY_LOGINUSER = #{companyLoginuser} AND STATUS = 'UNFREEZE' AND CHECK_STATUS = 'CHECK_COMMIT'
+    	AND COMPANY_PIC_PATH IS  NULL AND COMPANY_NAME IS  NULL AND COMPANY_OWN IS  NULL
+    </select>
+    
+    
+    <update id="enterpriseOfficialEdit" parameterType="com.jxyd.nole.web.image.oracle.alpha.model.EnterpriseOfficialParam">
+    	UPDATE CS200_COMPANY SET NOTE = #{note} , GMT_UPDATE = SYSDATE  WHERE CS200_ID = #{cs200Id}
+    </update>
+    
+    
+    <delete id="delEnterpriseOfficialEAdv" parameterType="com.jxyd.nole.web.image.oracle.alpha.model.EnterpriseOfficialParam">
+    	DELETE FROM CS205_LINK_CS200ANDCS204 WHERE CS200_ID = #{cs200Id}
+    </delete>
+    
+    <select id="enterpriseOfficialAdvType"  resultMap="BaseResultMap">
+    	SELECT CS204_ID FROM CS204_ADV_TYPE WHERE ADVTYPE_CODE = 'ADV_PUBLIC'
+    </select>
+    
+    <insert id="addEnterpriseOfficialEAdv" parameterType="com.jxyd.nole.web.image.oracle.alpha.model.EnterpriseOfficialParam">
+    	<selectKey keyProperty="cs205Id" order="BEFORE" resultType="java.lang.Long">
+      		SELECT SEQ_CS205.NEXTVAL FROM DUAL
+    	</selectKey>
+    	INSERT INTO CS205_LINK_CS200ANDCS204 (CS205_ID,CS200_ID,CS204_ID,GMT_CREATE,GMT_UPDATE,STATUS) VALUES (#{cs205Id},#{cs200Id},#{cs204Id},SYSDATE,SYSDATE,'ENABLE')
+    </insert>
+    
+    <update id="enterpriseOfficialDisableOperation" parameterType="com.jxyd.nole.web.image.oracle.alpha.model.EnterpriseOfficialParam">
+    	UPDATE CS200_COMPANY SET STATUS = #{status} , GMT_UPDATE = SYSDATE WHERE CS200_ID = #{cs200Id}
+    </update>
+    
+    
+
+</mapper>

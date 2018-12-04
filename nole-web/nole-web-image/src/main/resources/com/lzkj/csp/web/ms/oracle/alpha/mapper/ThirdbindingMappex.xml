@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jxyd.nole.web.image.oracle.alpha.mapper.ThirdbindingMappex">
+  <resultMap id="BaseResultMap" type="com.jxyd.nole.web.image.oracle.alpha.model.ThirdbindingExt">
+    <id column="CS107_ID" jdbcType="DECIMAL" property="cs107Id" />
+    <result column="CS100_ID" jdbcType="DECIMAL" property="cs100Id" />
+    <result column="THIRD_UID" jdbcType="VARCHAR" property="thirdUid" />
+    <result column="THIRD_TOKEN" jdbcType="VARCHAR" property="thirdToken" />
+    <result column="GMT_CREATE" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="THIRDTYPE" jdbcType="VARCHAR" property="thirdtype" />
+    <result column="GMT_UPDATE" jdbcType="TIMESTAMP" property="gmtUpdate" />
+    <result column="SDK_USERNAME" jdbcType="VARCHAR" property="sdkUsername" />
+    <result column="TRUENAME" jdbcType="VARCHAR" property="truename" />
+    <result column="USER_IDENTITY" jdbcType="VARCHAR" property="userIdentity" />
+  </resultMap>
+   
+  <select id="selectBycs100IdAndthirdUid" parameterType="com.jxyd.nole.web.image.oracle.alpha.model.ThirdbindingExt" resultMap="BaseResultMap">
+    select t.*,u.SDK_USERNAME,
+    u.TRUENAME,u.USER_IDENTITY
+    from CS107_THIRDBINDING t,cs100_appuser u
+    WHERE t.cs100_id=u.cs100_id 
+    AND t.cs100_id=#{cs100Id} 
+    AND t.cs107_id=#{cs107Id}
+  </select>
+  
+</mapper>

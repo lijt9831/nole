@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jxyd.nole.web.image.oracle.alpha.mapper.SystemMapper">
+
+	<resultMap type="com.jxyd.nole.web.image.oracle.alpha.model.Sysuser" id="SysuserMap">
+		<id column="CS001_ID" jdbcType="DECIMAL" property="cs001Id" />
+	    <result column="USERNAME" jdbcType="VARCHAR" property="username" />
+	    <result column="SYSUSER_PASSWORD" jdbcType="VARCHAR" property="sysuserPassword" />
+	    <result column="PASSWORD_SALT" jdbcType="VARCHAR" property="passwordSalt" />
+	    <result column="ACCOUNT_MOBILE" jdbcType="CHAR" property="accountMobile" />
+	    <result column="ACCOUNT_EMAIL" jdbcType="VARCHAR" property="accountEmail" />
+	    <result column="GMT_MODIFIED" jdbcType="TIMESTAMP" property="gmtModified" />
+	    <result column="GMT_CREATE" jdbcType="TIMESTAMP" property="gmtCreate" />
+	    <result column="AVAILABLE_OR_NOT" jdbcType="DECIMAL" property="availableOrNot" />
+	</resultMap>
+	<resultMap type="com.jxyd.nole.web.image.oracle.alpha.model.Sysrole" id="SysuserSSRoleMap">
+		<id column="CS002_ID" jdbcType="DECIMAL" property="cs002Id" />
+	    <result column="ROLE_CODE" jdbcType="VARCHAR" property="roleCode" />
+	    <result column="ROLE_NAME" jdbcType="VARCHAR" property="roleName" />
+	    <result column="ROLE_LEVEL" jdbcType="DECIMAL" property="roleLevel" />
+	    <result column="AVAILABLE_OR_NOT" jdbcType="DECIMAL" property="availableOrNot" />
+	    <result column="GMT_MODIFIED" jdbcType="TIMESTAMP" property="gmtModified" />
+	    <result column="GMT_CREATE" jdbcType="TIMESTAMP" property="gmtCreate" />
+	    <result column="CHECKED" jdbcType="DECIMAL" property="checked" />
+	</resultMap>
+	<resultMap type="com.jxyd.nole.web.image.oracle.alpha.model.Sysperm" id="SysroleSSPermMap">
+		<id column="CS003_ID" jdbcType="DECIMAL" property="cs003Id" />
+	    <result column="CS003_PID" jdbcType="DECIMAL" property="cs003Pid" />
+	    <result column="NODE_LEVEL" jdbcType="DECIMAL" property="nodeLevel" />
+	    <result column="NODE_LEVEL_ORDER" jdbcType="DECIMAL" property="nodeLevelOrder" />
+	    <result column="NODE_NAME" jdbcType="VARCHAR" property="nodeName" />
+	    <result column="NODE_ICON" jdbcType="VARCHAR" property="nodeIcon" />
+	    <result column="COLLAPSED_OR_NOT" jdbcType="DECIMAL" property="collapsedOrNot" />
+	    <result column="MENU_OR_NOT" jdbcType="DECIMAL" property="menuOrNot" />
+	    <result column="PERM_PATH" jdbcType="VARCHAR" property="permPath" />
+	    <result column="PERM_NAME" jdbcType="VARCHAR" property="permName" />
+	    <result column="PERM_ASYNC_OR_NOT" jdbcType="DECIMAL" property="permAsyncOrNot" />
+	    <result column="GMT_MODIFIED" jdbcType="TIMESTAMP" property="gmtModified" />
+	    <result column="GMT_CREATE" jdbcType="TIMESTAMP" property="gmtCreate" />
+	    <result column="HIDDEN_OR_NOT" jdbcType="DECIMAL" property="hiddenOrNot" />
+	    
+	    <result column="LVL" jdbcType="DECIMAL" property="lvl" />
+	    <result column="CHECKED" jdbcType="DECIMAL" property="checked" />
+	</resultMap>
+	
+	<delete id="deleteMenu" parameterType="java.util.Map">
+		delete from cs003_sysperm
+		 where cs003_id in (select t.cs003_id
+		                      from cs003_sysperm t
+		                     start with t.cs003_id = #{cs003Id,jdbcType=DECIMAL}
+		                    connect by t.cs003_pid = prior t.cs003_id)
+	</delete>
+	
+	<select id="selectSysuser" parameterType="java.util.Map" resultMap="SysuserMap">
+		select * from CS001_SYSUSER t where t.cs001_id = #{cs001Id,jdbcType=DECIMAL}
+	</select>
+	<select id="selectSysuserSSRole" parameterType="java.util.Map" resultMap="SysuserSSRoleMap">
+	    select r.*,
+		       case
+		         when l.cs004_id is null then
+		          0
+		         else
+		          1
+		       end as checked
+		  from cs002_sysrole r
+		  left join cs004_link_001and002 l
+		    on r.cs002_id = l.cs002_id
+		   and l.cs001_id = #{cs001Id,jdbcType=DECIMAL}
+		 order by r.role_level desc
+	</select>
+	
+	<select id="selectSysroleSSPerm" parameterType="java.util.Map" resultMap="SysroleSSPermMap">
+	    select p.CS003_ID, p.CS003_PID, p.NODE_LEVEL, p.NODE_LEVEL_ORDER, p.NODE_NAME, p.NODE_ICON, p.COLLAPSED_OR_NOT,p.MENU_OR_NOT, p.PERM_NAME, p.PERM_ASYNC_OR_NOT, p.GMT_MODIFIED, p.GMT_CREATE, p.HIDDEN_OR_NOT,
+		       SYS_CONNECT_BY_PATH(p.cs003_id, '/') as path,
+		       level as lvl,
+		       case when l.cs005_id is null then 0 else 1 end as checked
+		  from cs003_sysperm p
+		  left join cs005_link_002and003 l
+		    on p.cs003_id = l.cs003_id
+		   and l.cs002_id = #{cs002Id,jdbcType=DECIMAL}
+		 start with p.cs003_pid = 0
+		connect by p.cs003_pid = prior p.cs003_id
+		 order by path asc
+	</select>
+	<select id="selectSysSSMenu"  resultMap="SysroleSSPermMap">
+		select p.CS003_ID, p.CS003_PID, p.NODE_LEVEL, p.NODE_LEVEL_ORDER, p.NODE_NAME, p.NODE_ICON, p.COLLAPSED_OR_NOT,p.MENU_OR_NOT, p.PERM_NAME, p.PERM_ASYNC_OR_NOT, p.GMT_MODIFIED, p.GMT_CREATE, p.HIDDEN_OR_NOT,
+		  SYS_CONNECT_BY_PATH(p.cs003_id, '/') as path,
+		  level as lvl
+		  from cs003_sysperm p
+		 where p.menu_or_not = 1
+		 start with p.cs003_pid = 0
+		connect by p.cs003_pid = prior p.cs003_id
+		 order by path asc
+	</select>
+	
+	<select id="searchSysuser" resultMap="SysuserMap" parameterType="com.jxyd.nole.web.image.oracle.alpha.model.SysuserSearch">
+		select u.CS001_ID,u.USERNAME,u.ACCOUNT_MOBILE,u.ACCOUNT_EMAIL,u.GMT_MODIFIED,u.GMT_CREATE,u.AVAILABLE_OR_NOT, t.roles
+		  from cs001_sysuser u
+		  left join (select max(l.cs001_id) as cs001_id,
+		                    LISTAGG(r.role_name, ',') WITHIN GROUP(ORDER BY r.role_name DESC) AS roles
+		               from cs004_link_001and002 l
+		               left join cs002_sysrole r
+		                 on l.cs002_id = r.cs002_id
+		                 group by l.cs001_id) t
+		    on u.cs001_id = t.cs001_id
+		 <where>
+		 	<if test="username != null and username != '' ">
+			   and u.username = #{username,jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="accountMobile != null and accountMobile != '' ">
+			   and u.account_mobile = #{accountMobile,jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="accountEmail != null and accountEmail != '' ">
+			   and u.account_email = #{accountEmail,jdbcType=VARCHAR}
+		 	</if>
+		 	<if test="availableOrNot != null">
+			   and u.available_or_not = #{availableOrNot,jdbcType=DECIMAL}
+			</if>
+		 	<if test="gmtCreateStart != null and gmtCreateEnd == null">
+		 	   and u.gmt_create &gt;= #{gmtCreateStart,jdbcType=TIMESTAMP}
+		 	</if>
+		 	<if test="gmtCreateStart == null and gmtCreateEnd != null">
+		 	   and u.gmt_create &lt;= #{gmtCreateEnd,jdbcType=TIMESTAMP}
+		 	</if>
+		 	<if test="gmtCreateStart != null and gmtCreateEnd != null">
+		 	   and u.gmt_create &gt;= #{gmtCreateStart,jdbcType=TIMESTAMP}
+		 	   and u.gmt_create &lt;= #{gmtCreateEnd,jdbcType=TIMESTAMP}
+		 	</if>
+		 </where>
+	</select>
+	<select id="searchSysrole" resultMap="SysuserSSRoleMap" parameterType="com.jxyd.nole.web.image.oracle.alpha.model.SysroleSearch">
+		select * from cs002_sysrole r 
+		<where>
+			<if test="roleCode != null and roleCode != '' ">
+				and r.role_code = #{roleCode,jdbcType=VARCHAR}
+			</if>
+			<if test="roleName != null and roleName != '' ">
+				and r.role_name = #{roleName,jdbcType=VARCHAR}
+			</if>
+			<if test="roleLevel != null">
+				and r.role_level = #{roleLevel,jdbcType=DECIMAL}
+			</if>
+			<if test="availableOrNot != null">
+				and r.available_or_not = #{availableOrNot,jdbcType=DECIMAL}
+			</if>
+			<if test="gmtCreateStart != null and gmtCreateEnd == null">
+		 	   and r.gmt_create &gt;= #{gmtCreateStart,jdbcType=TIMESTAMP}
+		 	</if>
+		 	<if test="gmtCreateStart == null and gmtCreateEnd != null">
+		 	   and r.gmt_create &lt;= #{gmtCreateEnd,jdbcType=TIMESTAMP}
+		 	</if>
+		 	<if test="gmtCreateStart != null and gmtCreateEnd != null">
+		 	   and r.gmt_create &gt;= #{gmtCreateStart,jdbcType=TIMESTAMP}
+		 	   and r.gmt_create &lt;= #{gmtCreateEnd,jdbcType=TIMESTAMP}
+		 	</if>
+		</where>
+	</select>
+	
+	<select id="selectUserPermIds" parameterType="java.util.Map" resultType="java.lang.String">
+		select distinct p.PERM_PATH
+		  from cs001_sysuser u
+		  left join cs004_link_001and002 l1
+		    on u.cs001_id = l1.cs001_id
+		  left join cs005_link_002and003 l2
+		    on l1.cs002_id = l2.cs002_id
+		  left join cs003_sysperm p
+		    on l2.cs003_id = p.cs003_id
+		 where p.menu_or_not = 0
+		   and u.cs001_id = #{cs001Id, jdbcType = DECIMAL}
+	</select>
+	<!-- 	只有菜单且不包含隐藏 -->
+	<select id="selectUserSSMenu"  resultMap="SysroleSSPermMap">
+		select distinct t.*
+		  from (select p.*,
+		               SYS_CONNECT_BY_PATH(p.cs003_id, '/') as path,
+		               level as lvl
+		          from cs003_sysperm p
+		         where p.menu_or_not = 1 and p.hidden_or_not = 0
+		         start with p.cs003_pid = 0
+		        connect by p.cs003_pid = prior p.cs003_id) t
+		 inner join cs005_link_002and003 l1
+		    on t.cs003_id = l1.cs003_id
+		 inner join cs004_link_001and002 l2
+		    on l1.cs002_id = l2.cs002_id
+		 where l2.cs001_id = #{cs001Id,jdbcType=DECIMAL}
+		 order by path asc
+	</select>
+	<select id="selectMenuSSPerms"  resultMap="SysroleSSPermMap">
+		select p.*, SYS_CONNECT_BY_PATH(p.cs003_id, '/') as path, level as lvl
+		  from cs003_sysperm p
+		 where p.menu_or_not = 0
+		 start with p.cs003_pid = #{cs003Id,jdbcType=DECIMAL}
+		connect by p.cs003_pid = prior p.cs003_id
+	</select>
+</mapper>

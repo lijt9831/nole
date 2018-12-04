@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jxyd.nole.web.image.oracle.alpha.mapper.AppuserMappex">
+  
+  <resultMap id="BaseResultMap" type="com.jxyd.nole.web.image.oracle.alpha.model.AppuserExt">
+    <id column="CS100_ID" jdbcType="DECIMAL" property="cs100Id" />
+    <result column="SDK_USERNAME" jdbcType="VARCHAR" property="sdkUsername" />
+    <result column="SDK_PLATFORM" jdbcType="VARCHAR" property="sdkPlatform" />
+    <result column="GMT_CREATE" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="GMT_UPDATE" jdbcType="TIMESTAMP" property="gmtUpdate" />
+    <result column="CHILD_NUM" jdbcType="DECIMAL" property="childNum" />
+    <result column="TOTAL_EARNINGS" jdbcType="DECIMAL" property="totalEarnings" />
+    <result column="AVAILABLE_EARNINGS" jdbcType="DECIMAL" property="availableEarnings" />
+    <result column="STATUS" jdbcType="VARCHAR" property="status" />
+    <result column="VISITORS" jdbcType="DECIMAL" property="visitors" />
+    <result column="NEW_RECOMMEND" jdbcType="DECIMAL" property="newRecommend" />
+    <result column="RECOMMEND_CODE" jdbcType="VARCHAR" property="recommendCode" />
+    <result column="VISITORS_LISTSIZE" jdbcType="DECIMAL" property="visitorsListsize" />
+    <result column="CURRENT_LEVEL" jdbcType="DECIMAL" property="currentLevel" />
+    <result column="TRUENAME" jdbcType="VARCHAR" property="truename" />
+    <result column="USER_IDENTITY" jdbcType="VARCHAR" property="userIdentity" />
+    <result column="NICKNAME" jdbcType="VARCHAR" property="nickname" />
+    <result column="PAY_STATUS" jdbcType="VARCHAR" property="payStatus" />
+    <result column="CHILD_PAYEDNUM" jdbcType="DECIMAL" property="childPayednum" />
+    <result column="rechargeDate" jdbcType="TIMESTAMP" property="rechargeDate" />
+    
+  </resultMap>
+  
+  <select id="selectByExampleWithRowbounds" parameterType="com.jxyd.nole.web.image.oracle.alpha.model.AppuserExt" resultMap="BaseResultMap">
+    select t.*,b.gmt_update as rechargeDate
+    from CS100_APPUSER t left join cs110_buyisland b
+    on t.cs100_id=b.cs100_id  
+ 	and b.orderstatus='ORDER_PAYED'
+ 	WHERE 1=1
+ 	<if test="sdkUsername != null and sdkUsername != ''">
+        AND SDK_USERNAME = #{sdkUsername,jdbcType=VARCHAR}
+    </if>
+    
+    <if test="userIdentity != null and userIdentity != ''">
+      AND  user_identity = #{userIdentity,jdbcType=VARCHAR}
+    </if>
+    
+    <if test="status != null and status != ''">
+       AND status = #{status,jdbcType=VARCHAR}
+    </if>
+    
+    <if test="payStatus != null and payStatus != ''">
+       AND PAY_STATUS = #{payStatus,jdbcType=VARCHAR}
+    </if>
+    
+    <if test="childNumMin != null">
+  		<![CDATA[ AND t.CHILD_NUM >= #{childNumMin}]]>
+  	</if>
+  	
+  	<if test="childNumMax != null">
+  		<![CDATA[ AND t.CHILD_NUM <= #{childNumMax}]]>
+  	</if>
+  	
+    <if test="rechargeDateStart != null">
+  		<![CDATA[ AND b.gmt_update >= #{rechargeDateStart}]]>
+  	</if>
+  	
+  	<if test="rechargeDateEnd != null">
+  		<![CDATA[ AND b.gmt_update <= #{rechargeDateEnd}]]>
+  	</if>
+      
+     order by t.gmt_create DESC
+     
+  </select>
+
+
+    <select id="selectSumVisitors"  resultType="java.lang.Long">
+        select sum(VISITORS) from CS100_APPUSER
+    </select>
+  
+</mapper>

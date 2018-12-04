@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jxyd.nole.web.image.oracle.alpha.mapper.RevenueRecordMappex">
+  
+  <resultMap id="BaseResultMap" type="com.jxyd.nole.web.image.oracle.alpha.model.RevenueRecord">
+    <id column="CS102_ID" jdbcType="DECIMAL" property="cs102Id" />
+    <result column="CS100_ID" jdbcType="DECIMAL" property="cs100Id" />
+    <result column="SIDE_INDEX" jdbcType="DECIMAL" property="sideIndex" />
+    <result column="GMT_CREATE" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="GMT_UPDATE" jdbcType="TIMESTAMP" property="gmtUpdate" />
+    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+    
+  </resultMap>
+  
+  <select id="selectByExampleWithRowbounds" parameterType="com.jxyd.nole.web.image.oracle.alpha.model.RevenueRecord" resultMap="BaseResultMap">
+   	SELECT t.gmt_create,u.nickname 
+   	from CS112_TRANSACTION_RECORD t,
+    cs100_appuser u  
+	where t.cs100_childid=u.cs100_id
+
+	and t.record_type='CHILD_PAYED'
+
+	and t.cs100_id=#{cs100Id}
+  	 
+    order by t.gmt_create DESC
+  </select>
+ 
+</mapper>

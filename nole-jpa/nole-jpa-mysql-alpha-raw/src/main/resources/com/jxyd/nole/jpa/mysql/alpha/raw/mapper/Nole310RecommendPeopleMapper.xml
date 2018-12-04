@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jxyd.nole.jpa.mysql.alpha.raw.mapper.Nole310RecommendPeopleMapper">
+  <resultMap id="BaseResultMap" type="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole310RecommendPeople">
+    <id column="nole310_id" jdbcType="BIGINT" property="id" />
+    <result column="nole304_id" jdbcType="BIGINT" property="nole304Id" />
+    <result column="nole014_id" jdbcType="BIGINT" property="nole014Id" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    `nole310_id`, `nole304_id`, `nole014_id`, `gmt_create`
+  </sql>
+  <select id="selectByExample" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole310RecommendPeopleExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from nole310_recommend_people
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from nole310_recommend_people
+    where `nole310_id` = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from nole310_recommend_people
+    where `nole310_id` = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole310RecommendPeopleExample">
+    delete from nole310_recommend_people
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole310RecommendPeople">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into nole310_recommend_people (`nole304_id`, `nole014_id`, `gmt_create`
+      )
+    values (#{nole304Id,jdbcType=BIGINT}, #{nole014Id,jdbcType=BIGINT}, #{gmtCreate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole310RecommendPeople">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into nole310_recommend_people
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="nole304Id != null">
+        `nole304_id`,
+      </if>
+      <if test="nole014Id != null">
+        `nole014_id`,
+      </if>
+      <if test="gmtCreate != null">
+        `gmt_create`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="nole304Id != null">
+        #{nole304Id,jdbcType=BIGINT},
+      </if>
+      <if test="nole014Id != null">
+        #{nole014Id,jdbcType=BIGINT},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole310RecommendPeopleExample" resultType="java.lang.Long">
+    select count(*) from nole310_recommend_people
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update nole310_recommend_people
+    <set>
+      <if test="record.id != null">
+        `nole310_id` = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.nole304Id != null">
+        `nole304_id` = #{record.nole304Id,jdbcType=BIGINT},
+      </if>
+      <if test="record.nole014Id != null">
+        `nole014_id` = #{record.nole014Id,jdbcType=BIGINT},
+      </if>
+      <if test="record.gmtCreate != null">
+        `gmt_create` = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update nole310_recommend_people
+    set `nole310_id` = #{record.id,jdbcType=BIGINT},
+      `nole304_id` = #{record.nole304Id,jdbcType=BIGINT},
+      `nole014_id` = #{record.nole014Id,jdbcType=BIGINT},
+      `gmt_create` = #{record.gmtCreate,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole310RecommendPeople">
+    update nole310_recommend_people
+    <set>
+      <if test="nole304Id != null">
+        `nole304_id` = #{nole304Id,jdbcType=BIGINT},
+      </if>
+      <if test="nole014Id != null">
+        `nole014_id` = #{nole014Id,jdbcType=BIGINT},
+      </if>
+      <if test="gmtCreate != null">
+        `gmt_create` = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where `nole310_id` = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole310RecommendPeople">
+    update nole310_recommend_people
+    set `nole304_id` = #{nole304Id,jdbcType=BIGINT},
+      `nole014_id` = #{nole014Id,jdbcType=BIGINT},
+      `gmt_create` = #{gmtCreate,jdbcType=TIMESTAMP}
+    where `nole310_id` = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByExampleWithRowbounds" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole310RecommendPeopleExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from nole310_recommend_people
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByIndex1" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select * from nole310_recommend_people
+    <where>
+      and `nole304_id` = #{nole304Id,jdbcType=BIGINT}
+      and `nole014_id` = #{nole014Id,jdbcType=BIGINT}
+    </where>
+  </select>
+</mapper>

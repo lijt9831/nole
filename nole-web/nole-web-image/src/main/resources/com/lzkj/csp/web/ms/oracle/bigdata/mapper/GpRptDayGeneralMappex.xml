@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jxyd.nole.web.image.oracle.bigdata.mapper.GpRptDayGeneralMappex">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jxyd.nole.web.image.oracle.bigdata.model.GpRptDayGeneral">
+        <id column="ID" jdbcType="DECIMAL" property="id"/>
+        <result column="TOTAL_DATE" jdbcType="TIMESTAMP" property="totalDate"/>
+        <result column="REG_USER_NUM" jdbcType="DECIMAL" property="regUserNum"/>
+        <result column="REG_ENTERPRISE_NUM" jdbcType="DECIMAL" property="regEnterPriseNum"/>
+        <result column="ORDER_SUCCESS_NUM" jdbcType="DECIMAL" property="orderSuccessNum"/>
+        <result column="ORDER_TOTAL_NUM" jdbcType="DECIMAL" property="orderTotalNum"/>
+        <result column="USER_CLIENT_NUM" jdbcType="DECIMAL" property="userClientNum"/>
+        <result column="AD_INC_NUM" jdbcType="DECIMAL" property="adIncNum"/>
+        <result column="DAU" jdbcType="DECIMAL" property="dau"/>
+    </resultMap>
+
+    <select id="selectListByDate" resultMap="BaseResultMap">
+        select * from GP_RPT_DAY_GENERAL
+        <where>
+            <if test="beginTime != null and beginTime != ''">
+                and TOTAL_DATE &gt;= to_date( #{beginTime},'yyyy-mm-dd hh24:mi:ss')
+            </if>
+            <if test="endTime != null and endTime != ''">
+                and TOTAL_DATE &lt;= to_date( #{endTime},'yyyy-mm-dd hh24:mi:ss')
+            </if>
+        </where>
+        <choose>
+            <when test="isAsc == true">
+                order by TOTAL_DATE ASC
+            </when>
+            <otherwise>
+                order by TOTAL_DATE DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="selectCountByDate" resultType="java.lang.Integer">
+        select count(*) from GP_RPT_DAY_GENERAL
+        <where>
+            <if test="beginTime != null and beginTime != ''">
+                and TOTAL_DATE &gt;= to_date( #{beginTime},'yyyy-mm-dd hh24:mi:ss')
+            </if>
+            <if test="endTime != null and endTime != ''">
+                and TOTAL_DATE &lt;= to_date( #{endTime},'yyyy-mm-dd hh24:mi:ss')
+            </if>
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
+
+	<util:properties id="shiro" location="classpath*:env/shiro.properties" />
+	
+	<!-- https://shiro.apache.org/spring.html -->
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<property name="securityManager" ref="securityManager" />
+		<property name="filterChainDefinitionMap" ref="jdbcSection" />
+		<property name="unauthorizedUrl" value="#{shiro['shiro_unauthorizedUrl']}" />
+		<property name="loginUrl" value="#{shiro['shiro_loginUrl']}" />
+		<property name="successUrl" value="#{shiro['shiro_successUrl']}" />
+	</bean>
+	
+	<!-- 	https://shiro.apache.org/web.html#Web-URLPathExpressions -->
+	<!-- 	FIRST MATCH WINS -->
+	<bean id="jdbcSection" class="com.jxyd.nole.mgr.shiro.section.SectionFactoryBean">
+		<property name="anonUrls" value="#{shiro['shiro_urls_anon']}"></property>
+		<property name="authcUrls" value="#{shiro['shiro_urls_authc']}"></property>
+	</bean>
+
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<property name="realm" ref="jdbcRealm" />
+		<property name="sessionManager" ref="defaultWebSessionManager"></property>
+	</bean>
+	
+	<bean id="defaultWebSessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+	</bean>
+	
+	<bean id="jdbcRealm" class="com.jxyd.nole.mgr.shiro.realm.JdbcRealm">
+		<property name="credentialsMatcher" ref="credentialsMatcher"></property>
+	</bean>
+	
+	<bean id="credentialsMatcher" class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+		<property name="storedCredentialsHexEncoded" value="false"></property>
+		<property name="hashIterations" value="1024"></property>
+		<property name="hashAlgorithmName" value="SHA-256"></property>
+	</bean>
+	
+	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
+
+	<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor" />
+	<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+		<property name="securityManager" ref="securityManager" />
+	</bean>
+
+</beans>

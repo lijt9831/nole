@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jxyd.nole.jpa.mysql.alpha.raw.mapper.Nole501OrderStatusMapper">
+  <resultMap id="BaseResultMap" type="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole501OrderStatus">
+    <id column="nole501_id" jdbcType="BIGINT" property="id" />
+    <result column="nole500_id" jdbcType="BIGINT" property="nole500Id" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    `nole501_id`, `nole500_id`
+  </sql>
+  <select id="selectByExample" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole501OrderStatusExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from nole501_order_status
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from nole501_order_status
+    where `nole501_id` = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from nole501_order_status
+    where `nole501_id` = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole501OrderStatusExample">
+    delete from nole501_order_status
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole501OrderStatus">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into nole501_order_status (`nole500_id`)
+    values (#{nole500Id,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole501OrderStatus">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into nole501_order_status
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="nole500Id != null">
+        `nole500_id`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="nole500Id != null">
+        #{nole500Id,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole501OrderStatusExample" resultType="java.lang.Long">
+    select count(*) from nole501_order_status
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update nole501_order_status
+    <set>
+      <if test="record.id != null">
+        `nole501_id` = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.nole500Id != null">
+        `nole500_id` = #{record.nole500Id,jdbcType=BIGINT},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update nole501_order_status
+    set `nole501_id` = #{record.id,jdbcType=BIGINT},
+      `nole500_id` = #{record.nole500Id,jdbcType=BIGINT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole501OrderStatus">
+    update nole501_order_status
+    <set>
+      <if test="nole500Id != null">
+        `nole500_id` = #{nole500Id,jdbcType=BIGINT},
+      </if>
+    </set>
+    where `nole501_id` = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole501OrderStatus">
+    update nole501_order_status
+    set `nole500_id` = #{nole500Id,jdbcType=BIGINT}
+    where `nole501_id` = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByExampleWithRowbounds" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole501OrderStatusExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from nole501_order_status
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+</mapper>

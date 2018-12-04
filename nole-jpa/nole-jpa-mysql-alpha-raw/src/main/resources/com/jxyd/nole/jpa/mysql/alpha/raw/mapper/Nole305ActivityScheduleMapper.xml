@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jxyd.nole.jpa.mysql.alpha.raw.mapper.Nole305ActivityScheduleMapper">
+  <resultMap id="BaseResultMap" type="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole305ActivitySchedule">
+    <id column="nole305_id" jdbcType="BIGINT" property="id" />
+    <result column="nole304_id" jdbcType="BIGINT" property="nole304Id" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="destination" jdbcType="VARCHAR" property="destination" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+    <result column="daynum" jdbcType="INTEGER" property="daynum" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    `nole305_id`, `nole304_id`, `description`, `destination`, `gmt_create`, `gmt_modified`, 
+    `daynum`
+  </sql>
+  <select id="selectByExample" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole305ActivityScheduleExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from nole305_activity_schedule
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from nole305_activity_schedule
+    where `nole305_id` = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from nole305_activity_schedule
+    where `nole305_id` = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole305ActivityScheduleExample">
+    delete from nole305_activity_schedule
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole305ActivitySchedule">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into nole305_activity_schedule (`nole304_id`, `description`, `destination`, 
+      `gmt_create`, `gmt_modified`, `daynum`
+      )
+    values (#{nole304Id,jdbcType=BIGINT}, #{description,jdbcType=VARCHAR}, #{destination,jdbcType=VARCHAR}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}, #{daynum,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole305ActivitySchedule">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into nole305_activity_schedule
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="nole304Id != null">
+        `nole304_id`,
+      </if>
+      <if test="description != null">
+        `description`,
+      </if>
+      <if test="destination != null">
+        `destination`,
+      </if>
+      <if test="gmtCreate != null">
+        `gmt_create`,
+      </if>
+      <if test="gmtModified != null">
+        `gmt_modified`,
+      </if>
+      <if test="daynum != null">
+        `daynum`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="nole304Id != null">
+        #{nole304Id,jdbcType=BIGINT},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="destination != null">
+        #{destination,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="daynum != null">
+        #{daynum,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole305ActivityScheduleExample" resultType="java.lang.Long">
+    select count(*) from nole305_activity_schedule
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update nole305_activity_schedule
+    <set>
+      <if test="record.id != null">
+        `nole305_id` = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.nole304Id != null">
+        `nole304_id` = #{record.nole304Id,jdbcType=BIGINT},
+      </if>
+      <if test="record.description != null">
+        `description` = #{record.description,jdbcType=VARCHAR},
+      </if>
+      <if test="record.destination != null">
+        `destination` = #{record.destination,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gmtCreate != null">
+        `gmt_create` = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.gmtModified != null">
+        `gmt_modified` = #{record.gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.daynum != null">
+        `daynum` = #{record.daynum,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update nole305_activity_schedule
+    set `nole305_id` = #{record.id,jdbcType=BIGINT},
+      `nole304_id` = #{record.nole304Id,jdbcType=BIGINT},
+      `description` = #{record.description,jdbcType=VARCHAR},
+      `destination` = #{record.destination,jdbcType=VARCHAR},
+      `gmt_create` = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      `gmt_modified` = #{record.gmtModified,jdbcType=TIMESTAMP},
+      `daynum` = #{record.daynum,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole305ActivitySchedule">
+    update nole305_activity_schedule
+    <set>
+      <if test="nole304Id != null">
+        `nole304_id` = #{nole304Id,jdbcType=BIGINT},
+      </if>
+      <if test="description != null">
+        `description` = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="destination != null">
+        `destination` = #{destination,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        `gmt_create` = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        `gmt_modified` = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="daynum != null">
+        `daynum` = #{daynum,jdbcType=INTEGER},
+      </if>
+    </set>
+    where `nole305_id` = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole305ActivitySchedule">
+    update nole305_activity_schedule
+    set `nole304_id` = #{nole304Id,jdbcType=BIGINT},
+      `description` = #{description,jdbcType=VARCHAR},
+      `destination` = #{destination,jdbcType=VARCHAR},
+      `gmt_create` = #{gmtCreate,jdbcType=TIMESTAMP},
+      `gmt_modified` = #{gmtModified,jdbcType=TIMESTAMP},
+      `daynum` = #{daynum,jdbcType=INTEGER}
+    where `nole305_id` = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByExampleWithRowbounds" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole305ActivityScheduleExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from nole305_activity_schedule
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByIndex1" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select * from nole305_activity_schedule
+    <where>
+      and `nole304_id` = #{nole304Id,jdbcType=BIGINT}
+      and `daynum` = #{daynum,jdbcType=INTEGER}
+    </where>
+  </select>
+</mapper>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
+	
+	<util:properties id="redis" location="classpath*:env/redis.properties" />
+	
+	<!-- 	redis -->
+	 <bean id="jedisCluster" class="redis.clients.jedis.JedisCluster">
+        <constructor-arg>
+            <set>
+                <ref bean="node1" />
+                <ref bean="node2" />
+                <ref bean="node3" />
+                <ref bean="node4" />
+                <ref bean="node5" />
+                <ref bean="node6" />
+            </set>
+        </constructor-arg>
+        <constructor-arg><value>2000</value></constructor-arg>
+        <constructor-arg><value>100</value></constructor-arg>
+        <constructor-arg>
+        	<ref bean="jedisPoolConfig"/>
+        </constructor-arg>
+    </bean>
+
+    <bean id="node1" class="redis.clients.jedis.HostAndPort">
+        <constructor-arg name="host" value="#{redis['redis.node1.host']}"></constructor-arg>
+        <constructor-arg name="port" value="#{redis['redis.node1.port']}"></constructor-arg>
+    </bean>
+    <bean id="node2" class="redis.clients.jedis.HostAndPort">
+        <constructor-arg name="host" value="#{redis['redis.node2.host']}"></constructor-arg>
+        <constructor-arg name="port" value="#{redis['redis.node2.port']}"></constructor-arg>
+    </bean>
+    <bean id="node3" class="redis.clients.jedis.HostAndPort">
+        <constructor-arg name="host" value="#{redis['redis.node3.host']}"></constructor-arg>
+        <constructor-arg name="port" value="#{redis['redis.node3.port']}"></constructor-arg>
+    </bean>
+    <bean id="node4" class="redis.clients.jedis.HostAndPort">
+        <constructor-arg name="host" value="#{redis['redis.node4.host']}"></constructor-arg>
+        <constructor-arg name="port" value="#{redis['redis.node4.port']}"></constructor-arg>
+    </bean>
+    <bean id="node5" class="redis.clients.jedis.HostAndPort">
+        <constructor-arg name="host" value="#{redis['redis.node5.host']}"></constructor-arg>
+        <constructor-arg name="port" value="#{redis['redis.node5.port']}"></constructor-arg>
+    </bean>
+    <bean id="node6" class="redis.clients.jedis.HostAndPort">
+        <constructor-arg name="host" value="#{redis['redis.node6.host']}"></constructor-arg>
+        <constructor-arg name="port" value="#{redis['redis.node6.port']}"></constructor-arg>
+    </bean>
+    
+    <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+           <property name="maxTotal" value="100"/>
+           <property name="maxIdle" value="20"/>
+           <property name="minIdle" value="10"/>
+           <property name="blockWhenExhausted" value="true"></property>
+           <property name="maxWaitMillis" value="3000" />
+           <property name="testOnBorrow" value="false" />
+           <property name="testOnReturn" value="false" />
+           <property name="testWhileIdle" value="true" />
+	</bean>
+    
+</beans>

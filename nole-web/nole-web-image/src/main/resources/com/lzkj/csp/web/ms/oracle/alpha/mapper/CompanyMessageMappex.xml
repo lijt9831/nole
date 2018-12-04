@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jxyd.nole.web.image.oracle.alpha.mapper.CompanyMessageMappex">
+  
+  <insert id="companyMessageInit" parameterType="com.jxyd.nole.web.image.oracle.alpha.model.CompanyMessageParam">
+  		<selectKey keyProperty="cs206Id" order="BEFORE" resultType="java.lang.Long">
+      		SELECT SEQ_CS206.NEXTVAL FROM DUAL
+    	</selectKey>
+  		INSERT INTO CS206_COMPANY_MESSAGE (CS206_ID,CS200_ID,GMT_CREATE,GMT_UPDATE,READ_STATUS,MSG_TITLE,MSG_CONTENT,DEL_STATUS) 
+  		VALUES (#{cs206Id},#{cs200Id},SYSDATE,SYSDATE,'UNREAD',#{msgTitle},#{msgContent},'UNDELETE')
+  </insert>
+  
+</mapper>

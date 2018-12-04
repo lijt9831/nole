@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jxyd.nole.web.image.oracle.alpha.mapper.EnterpriseAdvExamineMappex">
+
+    <resultMap id="BaseResultMap" type="com.jxyd.nole.web.image.oracle.alpha.model.EnterpriseAdvExamineView">
+        <id column="CS201_ID" jdbcType="DECIMAL" property="cs201Id" />
+        <result column="CS200_ID" jdbcType="DECIMAL" property="cs200Id" />
+        <result column="TITLE" jdbcType="VARCHAR" property="title" />
+        <result column="ADVTYPE_CODE" jdbcType="VARCHAR" property="advtypeCode" /> 
+        <result column="ADVTYPE_NAME" jdbcType="VARCHAR" property="advtypeName" /> 
+        <result column="PIC_RELATIVEPATH" jdbcType="VARCHAR" property="picRelativepath" />
+        <result column="COMPANY_NAME" jdbcType="VARCHAR" property="companyName" /> 
+        <result column="STATUS" jdbcType="VARCHAR" property="status" />
+        <result column="NOTE" jdbcType="VARCHAR" property="note" />
+        <result column="SUPPORT_PLATFORM" jdbcType="VARCHAR" property="supportPlatform" />
+        <result column="ADV_H5_URL" jdbcType="VARCHAR" property="advH5Url" />
+    </resultMap>
+    
+    
+    <select id="enterpriseAdvexamineDetails" parameterType="com.jxyd.nole.web.image.oracle.alpha.model.EnterpriseAdvExamineParam" resultMap="BaseResultMap">
+    	SELECT CS201_ID,CS200_ID,TITLE FROM CS201_ADVERTISMENT WHERE CS201_ID = #{cs201Id}
+    </select>
+    
+    
+    <select id="enterpriseAdvexamineList" parameterType="com.jxyd.nole.web.image.oracle.alpha.model.EnterpriseAdvExamineParam" resultMap="BaseResultMap">
+    	SELECT a.SUPPORT_PLATFORM,a.ADV_H5_URL,a.CS201_ID,a.NOTE,a.TITLE,a.PIC_RELATIVEPATH,a.STATUS,d.ADVTYPE_CODE,d.ADVTYPE_NAME,c.COMPANY_NAME FROM CS201_ADVERTISMENT a 
+    	LEFT JOIN CS204_ADV_TYPE d ON a.CS204_ID = d.CS204_ID
+    	LEFT JOIN CS200_COMPANY c ON a.CS200_ID = c.CS200_ID
+    		<where>
+    			<if test="title !=null and title !=''">
+    				a.TITLE = #{title}
+    			</if>
+    			<if test="advtypeCode != null and advtypeCode !=''">
+    				AND d.ADVTYPE_CODE = #{advtypeCode}
+    			</if>
+    			<if test="status != null and status !=''">
+    				AND a.STATUS = #{status}
+    			</if>
+    			<if test="supportPlatform != null and supportPlatform !=''">
+    				AND a.SUPPORT_PLATFORM = #{supportPlatform}
+    			</if>
+    		</where>
+    	ORDER BY a.GMT_CREATE DESC
+    </select>
+    
+    
+    <update id="enterpriseAdvexamineOperation" parameterType="com.jxyd.nole.web.image.oracle.alpha.model.EnterpriseAdvExamineParam">
+    	UPDATE CS201_ADVERTISMENT SET 
+    		STATUS = #{status},
+    			<if test="note != null and note !=''">
+    				NOTE =  #{note},
+    			</if>
+    		GMT_UPDATE = SYSDATE
+    	WHERE CS201_ID = #{cs201Id} AND STATUS = 'UNCHECK' 
+    </update>
+    
+    
+
+</mapper>

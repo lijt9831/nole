@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jxyd.nole.jpa.mysql.alpha.raw.mapper.Nole309ActivityApplyMapper">
+  <resultMap id="BaseResultMap" type="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole309ActivityApply">
+    <id column="nole309_id" jdbcType="BIGINT" property="id" />
+    <result column="nole200_id" jdbcType="BIGINT" property="nole200Id" />
+    <result column="nole301_id" jdbcType="BIGINT" property="nole301Id" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="car" jdbcType="VARCHAR" property="car" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    `nole309_id`, `nole200_id`, `nole301_id`, `gmt_create`, `remark`, `car`
+  </sql>
+  <select id="selectByExample" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole309ActivityApplyExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from nole309_activity_apply
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from nole309_activity_apply
+    where `nole309_id` = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from nole309_activity_apply
+    where `nole309_id` = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole309ActivityApplyExample">
+    delete from nole309_activity_apply
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole309ActivityApply">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into nole309_activity_apply (`nole200_id`, `nole301_id`, `gmt_create`, 
+      `remark`, `car`)
+    values (#{nole200Id,jdbcType=BIGINT}, #{nole301Id,jdbcType=BIGINT}, #{gmtCreate,jdbcType=TIMESTAMP}, 
+      #{remark,jdbcType=VARCHAR}, #{car,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole309ActivityApply">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into nole309_activity_apply
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="nole200Id != null">
+        `nole200_id`,
+      </if>
+      <if test="nole301Id != null">
+        `nole301_id`,
+      </if>
+      <if test="gmtCreate != null">
+        `gmt_create`,
+      </if>
+      <if test="remark != null">
+        `remark`,
+      </if>
+      <if test="car != null">
+        `car`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="nole200Id != null">
+        #{nole200Id,jdbcType=BIGINT},
+      </if>
+      <if test="nole301Id != null">
+        #{nole301Id,jdbcType=BIGINT},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="car != null">
+        #{car,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole309ActivityApplyExample" resultType="java.lang.Long">
+    select count(*) from nole309_activity_apply
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update nole309_activity_apply
+    <set>
+      <if test="record.id != null">
+        `nole309_id` = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.nole200Id != null">
+        `nole200_id` = #{record.nole200Id,jdbcType=BIGINT},
+      </if>
+      <if test="record.nole301Id != null">
+        `nole301_id` = #{record.nole301Id,jdbcType=BIGINT},
+      </if>
+      <if test="record.gmtCreate != null">
+        `gmt_create` = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.remark != null">
+        `remark` = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.car != null">
+        `car` = #{record.car,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update nole309_activity_apply
+    set `nole309_id` = #{record.id,jdbcType=BIGINT},
+      `nole200_id` = #{record.nole200Id,jdbcType=BIGINT},
+      `nole301_id` = #{record.nole301Id,jdbcType=BIGINT},
+      `gmt_create` = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      `remark` = #{record.remark,jdbcType=VARCHAR},
+      `car` = #{record.car,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole309ActivityApply">
+    update nole309_activity_apply
+    <set>
+      <if test="nole200Id != null">
+        `nole200_id` = #{nole200Id,jdbcType=BIGINT},
+      </if>
+      <if test="nole301Id != null">
+        `nole301_id` = #{nole301Id,jdbcType=BIGINT},
+      </if>
+      <if test="gmtCreate != null">
+        `gmt_create` = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null">
+        `remark` = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="car != null">
+        `car` = #{car,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where `nole309_id` = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole309ActivityApply">
+    update nole309_activity_apply
+    set `nole200_id` = #{nole200Id,jdbcType=BIGINT},
+      `nole301_id` = #{nole301Id,jdbcType=BIGINT},
+      `gmt_create` = #{gmtCreate,jdbcType=TIMESTAMP},
+      `remark` = #{remark,jdbcType=VARCHAR},
+      `car` = #{car,jdbcType=VARCHAR}
+    where `nole309_id` = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByExampleWithRowbounds" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole309ActivityApplyExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from nole309_activity_apply
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByIndex1" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select * from nole309_activity_apply
+    <where>
+      and `nole200_id` = #{nole200Id,jdbcType=BIGINT}
+      and `nole301_id` = #{nole301Id,jdbcType=BIGINT}
+    </where>
+  </select>
+</mapper>

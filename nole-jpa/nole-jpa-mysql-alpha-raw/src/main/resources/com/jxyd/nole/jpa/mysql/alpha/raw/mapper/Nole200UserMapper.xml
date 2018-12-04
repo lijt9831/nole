@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jxyd.nole.jpa.mysql.alpha.raw.mapper.Nole200UserMapper">
+  <resultMap id="BaseResultMap" type="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole200User">
+    <id column="nole200_id" jdbcType="BIGINT" property="id" />
+    <result column="wx_openid" jdbcType="VARCHAR" property="wxOpenid" />
+    <result column="wx_session_key" jdbcType="VARCHAR" property="wxSessionKey" />
+    <result column="wx_nick_name" jdbcType="VARCHAR" property="wxNickName" />
+    <result column="wx_avatar_url" jdbcType="VARCHAR" property="wxAvatarUrl" />
+    <result column="wx_gender" jdbcType="CHAR" property="wxGender" />
+    <result column="wx_city" jdbcType="VARCHAR" property="wxCity" />
+    <result column="wx_province" jdbcType="VARCHAR" property="wxProvince" />
+    <result column="wx_country" jdbcType="VARCHAR" property="wxCountry" />
+    <result column="mobile" jdbcType="CHAR" property="mobile" />
+    <result column="truename" jdbcType="VARCHAR" property="truename" />
+    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+    <result column="verified_or_not" jdbcType="CHAR" property="verifiedOrNot" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="available_or_not" jdbcType="CHAR" property="availableOrNot" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    `nole200_id`, `wx_openid`, `wx_session_key`, `wx_nick_name`, `wx_avatar_url`, `wx_gender`, 
+    `wx_city`, `wx_province`, `wx_country`, `mobile`, `truename`, `nickname`, `verified_or_not`, 
+    `gmt_modified`, `gmt_create`, `available_or_not`
+  </sql>
+  <select id="selectByExample" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole200UserExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from nole200_user
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from nole200_user
+    where `nole200_id` = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from nole200_user
+    where `nole200_id` = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole200UserExample">
+    delete from nole200_user
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole200User">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into nole200_user (`wx_openid`, `wx_session_key`, `wx_nick_name`, 
+      `wx_avatar_url`, `wx_gender`, `wx_city`, 
+      `wx_province`, `wx_country`, `mobile`, 
+      `truename`, `nickname`, `verified_or_not`, 
+      `gmt_modified`, `gmt_create`, `available_or_not`
+      )
+    values (#{wxOpenid,jdbcType=VARCHAR}, #{wxSessionKey,jdbcType=VARCHAR}, #{wxNickName,jdbcType=VARCHAR}, 
+      #{wxAvatarUrl,jdbcType=VARCHAR}, #{wxGender,jdbcType=CHAR}, #{wxCity,jdbcType=VARCHAR}, 
+      #{wxProvince,jdbcType=VARCHAR}, #{wxCountry,jdbcType=VARCHAR}, #{mobile,jdbcType=CHAR}, 
+      #{truename,jdbcType=VARCHAR}, #{nickname,jdbcType=VARCHAR}, #{verifiedOrNot,jdbcType=CHAR}, 
+      #{gmtModified,jdbcType=TIMESTAMP}, #{gmtCreate,jdbcType=TIMESTAMP}, #{availableOrNot,jdbcType=CHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole200User">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into nole200_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="wxOpenid != null">
+        `wx_openid`,
+      </if>
+      <if test="wxSessionKey != null">
+        `wx_session_key`,
+      </if>
+      <if test="wxNickName != null">
+        `wx_nick_name`,
+      </if>
+      <if test="wxAvatarUrl != null">
+        `wx_avatar_url`,
+      </if>
+      <if test="wxGender != null">
+        `wx_gender`,
+      </if>
+      <if test="wxCity != null">
+        `wx_city`,
+      </if>
+      <if test="wxProvince != null">
+        `wx_province`,
+      </if>
+      <if test="wxCountry != null">
+        `wx_country`,
+      </if>
+      <if test="mobile != null">
+        `mobile`,
+      </if>
+      <if test="truename != null">
+        `truename`,
+      </if>
+      <if test="nickname != null">
+        `nickname`,
+      </if>
+      <if test="verifiedOrNot != null">
+        `verified_or_not`,
+      </if>
+      <if test="gmtModified != null">
+        `gmt_modified`,
+      </if>
+      <if test="gmtCreate != null">
+        `gmt_create`,
+      </if>
+      <if test="availableOrNot != null">
+        `available_or_not`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="wxOpenid != null">
+        #{wxOpenid,jdbcType=VARCHAR},
+      </if>
+      <if test="wxSessionKey != null">
+        #{wxSessionKey,jdbcType=VARCHAR},
+      </if>
+      <if test="wxNickName != null">
+        #{wxNickName,jdbcType=VARCHAR},
+      </if>
+      <if test="wxAvatarUrl != null">
+        #{wxAvatarUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="wxGender != null">
+        #{wxGender,jdbcType=CHAR},
+      </if>
+      <if test="wxCity != null">
+        #{wxCity,jdbcType=VARCHAR},
+      </if>
+      <if test="wxProvince != null">
+        #{wxProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="wxCountry != null">
+        #{wxCountry,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        #{mobile,jdbcType=CHAR},
+      </if>
+      <if test="truename != null">
+        #{truename,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null">
+        #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="verifiedOrNot != null">
+        #{verifiedOrNot,jdbcType=CHAR},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="availableOrNot != null">
+        #{availableOrNot,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole200UserExample" resultType="java.lang.Long">
+    select count(*) from nole200_user
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update nole200_user
+    <set>
+      <if test="record.id != null">
+        `nole200_id` = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.wxOpenid != null">
+        `wx_openid` = #{record.wxOpenid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wxSessionKey != null">
+        `wx_session_key` = #{record.wxSessionKey,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wxNickName != null">
+        `wx_nick_name` = #{record.wxNickName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wxAvatarUrl != null">
+        `wx_avatar_url` = #{record.wxAvatarUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wxGender != null">
+        `wx_gender` = #{record.wxGender,jdbcType=CHAR},
+      </if>
+      <if test="record.wxCity != null">
+        `wx_city` = #{record.wxCity,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wxProvince != null">
+        `wx_province` = #{record.wxProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wxCountry != null">
+        `wx_country` = #{record.wxCountry,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mobile != null">
+        `mobile` = #{record.mobile,jdbcType=CHAR},
+      </if>
+      <if test="record.truename != null">
+        `truename` = #{record.truename,jdbcType=VARCHAR},
+      </if>
+      <if test="record.nickname != null">
+        `nickname` = #{record.nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.verifiedOrNot != null">
+        `verified_or_not` = #{record.verifiedOrNot,jdbcType=CHAR},
+      </if>
+      <if test="record.gmtModified != null">
+        `gmt_modified` = #{record.gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.gmtCreate != null">
+        `gmt_create` = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.availableOrNot != null">
+        `available_or_not` = #{record.availableOrNot,jdbcType=CHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update nole200_user
+    set `nole200_id` = #{record.id,jdbcType=BIGINT},
+      `wx_openid` = #{record.wxOpenid,jdbcType=VARCHAR},
+      `wx_session_key` = #{record.wxSessionKey,jdbcType=VARCHAR},
+      `wx_nick_name` = #{record.wxNickName,jdbcType=VARCHAR},
+      `wx_avatar_url` = #{record.wxAvatarUrl,jdbcType=VARCHAR},
+      `wx_gender` = #{record.wxGender,jdbcType=CHAR},
+      `wx_city` = #{record.wxCity,jdbcType=VARCHAR},
+      `wx_province` = #{record.wxProvince,jdbcType=VARCHAR},
+      `wx_country` = #{record.wxCountry,jdbcType=VARCHAR},
+      `mobile` = #{record.mobile,jdbcType=CHAR},
+      `truename` = #{record.truename,jdbcType=VARCHAR},
+      `nickname` = #{record.nickname,jdbcType=VARCHAR},
+      `verified_or_not` = #{record.verifiedOrNot,jdbcType=CHAR},
+      `gmt_modified` = #{record.gmtModified,jdbcType=TIMESTAMP},
+      `gmt_create` = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      `available_or_not` = #{record.availableOrNot,jdbcType=CHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole200User">
+    update nole200_user
+    <set>
+      <if test="wxOpenid != null">
+        `wx_openid` = #{wxOpenid,jdbcType=VARCHAR},
+      </if>
+      <if test="wxSessionKey != null">
+        `wx_session_key` = #{wxSessionKey,jdbcType=VARCHAR},
+      </if>
+      <if test="wxNickName != null">
+        `wx_nick_name` = #{wxNickName,jdbcType=VARCHAR},
+      </if>
+      <if test="wxAvatarUrl != null">
+        `wx_avatar_url` = #{wxAvatarUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="wxGender != null">
+        `wx_gender` = #{wxGender,jdbcType=CHAR},
+      </if>
+      <if test="wxCity != null">
+        `wx_city` = #{wxCity,jdbcType=VARCHAR},
+      </if>
+      <if test="wxProvince != null">
+        `wx_province` = #{wxProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="wxCountry != null">
+        `wx_country` = #{wxCountry,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        `mobile` = #{mobile,jdbcType=CHAR},
+      </if>
+      <if test="truename != null">
+        `truename` = #{truename,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null">
+        `nickname` = #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="verifiedOrNot != null">
+        `verified_or_not` = #{verifiedOrNot,jdbcType=CHAR},
+      </if>
+      <if test="gmtModified != null">
+        `gmt_modified` = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtCreate != null">
+        `gmt_create` = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="availableOrNot != null">
+        `available_or_not` = #{availableOrNot,jdbcType=CHAR},
+      </if>
+    </set>
+    where `nole200_id` = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole200User">
+    update nole200_user
+    set `wx_openid` = #{wxOpenid,jdbcType=VARCHAR},
+      `wx_session_key` = #{wxSessionKey,jdbcType=VARCHAR},
+      `wx_nick_name` = #{wxNickName,jdbcType=VARCHAR},
+      `wx_avatar_url` = #{wxAvatarUrl,jdbcType=VARCHAR},
+      `wx_gender` = #{wxGender,jdbcType=CHAR},
+      `wx_city` = #{wxCity,jdbcType=VARCHAR},
+      `wx_province` = #{wxProvince,jdbcType=VARCHAR},
+      `wx_country` = #{wxCountry,jdbcType=VARCHAR},
+      `mobile` = #{mobile,jdbcType=CHAR},
+      `truename` = #{truename,jdbcType=VARCHAR},
+      `nickname` = #{nickname,jdbcType=VARCHAR},
+      `verified_or_not` = #{verifiedOrNot,jdbcType=CHAR},
+      `gmt_modified` = #{gmtModified,jdbcType=TIMESTAMP},
+      `gmt_create` = #{gmtCreate,jdbcType=TIMESTAMP},
+      `available_or_not` = #{availableOrNot,jdbcType=CHAR}
+    where `nole200_id` = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByExampleWithRowbounds" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole200UserExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from nole200_user
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByIndex1" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select * from nole200_user
+    <where>
+      and `wx_openid` = #{wxOpenid,jdbcType=VARCHAR}
+    </where>
+  </select>
+  <select id="selectByIndex2" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select * from nole200_user
+    <where>
+      and `mobile` = #{mobile,jdbcType=CHAR}
+    </where>
+  </select>
+</mapper>

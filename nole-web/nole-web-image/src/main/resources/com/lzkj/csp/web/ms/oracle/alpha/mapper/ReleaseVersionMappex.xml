@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jxyd.nole.web.image.oracle.alpha.mapper.ReleaseVersionMappex">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jxyd.jpa.oracle.alpha.raw.model.Cs006Releaseversion">
+        <id column="CS006_ID" jdbcType="DECIMAL" property="cs006Id"/>
+        <result column="GMT_CREATE" jdbcType="TIMESTAMP" property="gmtCreate"/>
+        <result column="DOWNLOAD_URL" jdbcType="VARCHAR" property="downloadUrl"/>
+        <result column="VERSION_NAME" jdbcType="VARCHAR" property="versionName"/>
+        <result column="STATUS" jdbcType="VARCHAR" property="status"/>
+        <result column="UPDATEDESC" jdbcType="VARCHAR" property="updatedesc"/>
+        <result column="APKFILE_MD5" jdbcType="VARCHAR" property="apkfileMd5"/>
+    </resultMap>
+
+    <resultMap id="ListResultMap" type="com.jxyd.nole.web.image.oracle.alpha.model.ReleaseVersionView">
+        <id column="ID" jdbcType="DECIMAL" property="id"/>
+        <result column="GMT_CREATE" jdbcType="TIMESTAMP" property="gmtCreate"/>
+        <result column="OLD_VERSIONS" jdbcType="VARCHAR" property="oldVersions"/>
+        <result column="VERSION_NAME" jdbcType="VARCHAR" property="versionName"/>
+        <result column="UPDATE_TYPE" jdbcType="VARCHAR" property="updateType"/>
+        <result column="UPDATE_DESC" jdbcType="VARCHAR" property="updateDesc"/>
+        <result column="UPDATE_STATUS" jdbcType="VARCHAR" property="updateStatus"/>
+        <result column="APKFILE_SIZE" jdbcType="DECIMAL" property="apkFileSize"/>
+    </resultMap>
+
+
+    <select id="getOneByVersionName" resultMap="BaseResultMap">
+        SELECT * from cs006_releaseversion
+        where VERSION_NAME = #{version,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectList" resultMap="ListResultMap">
+        SELECT
+        cs006.CS006_ID AS ID,
+        cs006.GMT_CREATE as GMT_CREATE,
+        cs006.VERSION_NAME as VERSION_NAME,
+        LISTAGG(cs000.OLDVERSION, ',') WITHIN GROUP(ORDER BY cs000.OLDVERSION) AS OLD_VERSIONS,
+        cs006.UPDATEDESC as UPDATE_DESC,
+        cs000.UPDATETYPE as UPDATE_TYPE,
+        cs000.UPDATE_STATUS as UPDATE_STATUS,
+        cs006.APKFILE_SIZE as APKFILE_SIZE
+        FROM
+        CS006_RELEASEVERSION cs006
+        LEFT JOIN CS000_UPDATE cs000 ON cs006.VERSION_NAME = cs000.NEWVERSION
+        <where>
+            cs000.UPDATE_STATUS <![CDATA[ <> ]]> 'DELETE'
+            <if test="version != null and version != '' ">
+                and cs006.VERSION_NAME = #{version}
+            </if>
+            <if test="oldVersions !=null and oldVersions.size() > 0">
+                and cs000.OLDVERSION in
+                <foreach collection="oldVersions" item="item" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="status != null and status != '' ">
+                and cs000.UPDATE_STATUS = #{status}
+            </if>
+            <if test="beginDate != null and beginDate !=''">
+                AND cs006.GMT_CREATE &gt;= TO_DATE(#{beginDate},'yyyy-MM-dd HH24:mi:ss')
+            </if>
+            <if test="endDate != null and endDate != ''">
+                AND cs006.GMT_CREATE &lt;= TO_DATE(#{endDate},'yyyy-MM-dd HH24:mi:ss')
+            </if>
+        </where>
+        GROUP BY
+        cs006.VERSION_NAME,cs006.CS006_ID,cs006.GMT_CREATE,cs006.UPDATEDESC,cs000.UPDATETYPE,cs000.UPDATE_STATUS,
+        cs006.APKFILE_SIZE
+        order by cs006.GMT_CREATE desc
+    </select>
+
+    <select id="selectCount" resultType="java.lang.Long">
+        SELECT count(*) from (
+        SELECT
+        cs006.VERSION_NAME as VERSION_NAME
+        FROM
+        CS006_RELEASEVERSION cs006
+        LEFT JOIN CS000_UPDATE cs000 ON cs006.VERSION_NAME = cs000.NEWVERSION
+        <where>
+            cs000.UPDATE_STATUS <![CDATA[ <> ]]> 'DELETE'
+            <if test="version != null and version != '' ">
+                and cs006.VERSION_NAME = #{version}
+            </if>
+            <if test="oldVersions !=null and oldVersions.size() > 0">
+                and cs000.OLDVERSION in
+                <foreach collection="oldVersions" item="item" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="status != null and status != '' ">
+                and cs000.UPDATE_STATUS = #{status}
+            </if>
+            <if test="beginDate != null and beginDate !=''">
+                AND cs006.GMT_CREATE &gt;= TO_DATE(#{beginDate},'yyyy-MM-dd HH24:mi:ss')
+            </if>
+            <if test="endDate != null and endDate != ''">
+                AND cs006.GMT_CREATE &lt;= TO_DATE(#{endDate},'yyyy-MM-dd HH24:mi:ss')
+            </if>
+        </where>
+        GROUP BY cs006.VERSION_NAME
+        ) t
+    </select>
+
+    <select id="getReleaseVersionListLessThanVersion" resultType="java.lang.String">
+        SELECT VERSION_NAME from CS006_RELEASEVERSION
+        <where>
+            STATUS = 'RELEASE'
+            <if test="version != null and version !='' ">
+                and VERSION_NAME &lt; #{version,jdbcType=VARCHAR}
+            </if>
+        </where>
+        order by VERSION_NAME
+    </select>
+
+    <update id="updateStatusByVersionName">
+        update CS006_RELEASEVERSION set STATUS = #{status,jdbcType=VARCHAR}
+        where VERSION_NAME = #{version,jdbcType=VARCHAR}
+    </update>
+</mapper>

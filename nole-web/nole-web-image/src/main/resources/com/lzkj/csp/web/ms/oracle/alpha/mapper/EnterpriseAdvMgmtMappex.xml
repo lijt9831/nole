@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jxyd.nole.web.image.oracle.alpha.mapper.EnterpriseAdvMgmtMappex">
+
+    <resultMap id="BaseResultMap" type="com.jxyd.nole.web.image.oracle.alpha.model.EnterpriseAdvMgmtView">
+        <id column="CS201_ID" jdbcType="DECIMAL" property="cs201Id" />
+        <result column="CS200_ID" jdbcType="DECIMAL" property="cs200Id" />
+        <result column="TITLE" jdbcType="VARCHAR" property="title" />
+        <result column="ADVTYPE_CODE" jdbcType="VARCHAR" property="advtypeCode" />
+        <result column="ADVTYPE_NAME" jdbcType="VARCHAR" property="advtypeName" />
+        <result column="PIC_RELATIVEPATH" jdbcType="VARCHAR" property="picRelativepath" />
+        <result column="COMPANY_NAME" jdbcType="VARCHAR" property="companyName" />
+        <result column="ALREADY_DISPLAY" jdbcType="DECIMAL" property="alreadyDisplay" />
+        <result column="AVAILABLE_TIMES" jdbcType="DECIMAL" property="availableTimes" />
+        <result column="DISPLAY_STATUS" jdbcType="VARCHAR" property="displayStatus" />
+        <result column="AVAILABLE_OR_NOT" jdbcType="VARCHAR" property="availableOrNot" />
+        <result column="NOTE" jdbcType="VARCHAR" property="note" />
+        <result column="SUPPORT_PLATFORM" jdbcType="VARCHAR" property="supportPlatform" />
+        <result column="ADV_H5_URL" jdbcType="VARCHAR" property="advH5Url" />
+    </resultMap>
+    
+    
+    <select id="enterpriseAdvDetails" parameterType="com.jxyd.nole.web.image.oracle.alpha.model.EnterpriseAdvMgmtParam" resultMap="BaseResultMap">
+    	SELECT CS201_ID,CS200_ID,TITLE FROM CS201_ADVERTISMENT WHERE CS201_ID = #{cs201Id}
+    </select>
+    
+    <select id="enterpriseAdvList" parameterType="com.jxyd.nole.web.image.oracle.alpha.model.EnterpriseAdvMgmtParam" resultMap="BaseResultMap">
+    	SELECT 
+    	a.SUPPORT_PLATFORM,a.ADV_H5_URL,a.CS201_ID,a.TITLE,a.PIC_RELATIVEPATH,a.DISPLAY_STATUS,a.AVAILABLE_OR_NOT,a.NOTE,a.AVAILABLE_TIMES,t.ADVTYPE_CODE,t.ADVTYPE_NAME,c.COMPANY_NAME,(h.CONF_COUNT-a.AVAILABLE_TIMES) AS ALREADY_DISPLAY
+    	FROM CS201_ADVERTISMENT a 
+		LEFT JOIN CS204_ADV_TYPE t ON a.CS204_ID = t.CS204_ID
+		LEFT JOIN CS200_COMPANY c ON a.CS200_ID = c.CS200_ID
+		LEFT JOIN (SELECT o.CS201_ID,SUM(d.CONF_COUNT) AS CONF_COUNT FROM CS202_COMPANY_ORDER o LEFT JOIN CS203_ADVSYSCONF d on o.CS203_ID = d.CS203_ID WHERE o.ORDERSTATUS = 'ORDER_PAYED' GROUP BY o.CS201_ID) h
+		ON a.CS201_ID = h.CS201_ID
+    	WHERE a.STATUS = 'CHECKED_PASS'
+    	
+    	<if test="title != null and title !=''">
+    		AND a.TITLE = #{title}
+    	</if>
+    	<if test="advtypeCode != null and advtypeCode !=''">
+    		AND t.ADVTYPE_CODE = #{advtypeCode}
+    	</if>
+    	<if test="displayStatus != null and displayStatus !=''">
+    		AND a.DISPLAY_STATUS = #{displayStatus}
+    	</if>
+    	<if test="availableOrNot != null and availableOrNot !=''">
+    		AND a.AVAILABLE_OR_NOT = #{availableOrNot}
+    	</if>
+    	<if test="supportPlatform != null and supportPlatform !=''">
+ 			AND a.SUPPORT_PLATFORM = #{supportPlatform}
+ 		</if>
+    	ORDER BY a.GMT_CREATE DESC
+    	
+    </select>
+    
+    
+    <update id="enterpriseAdvOperation" parameterType="com.jxyd.nole.web.image.oracle.alpha.model.EnterpriseAdvMgmtParam">
+    	UPDATE CS201_ADVERTISMENT SET
+    		AVAILABLE_OR_NOT = #{availableOrNot},
+    		DISPLAY_STATUS = 'OFFLINE',
+    			<if test="note != null and note !=''">
+    				NOTE = #{note},
+    			</if>
+    		GMT_UPDATE = SYSDATE
+    	WHERE CS201_ID = #{cs201Id}
+    </update>
+    
+    
+
+</mapper>

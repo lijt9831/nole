@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jxyd.nole.web.wx.mysql.alpha.mapper.MemberMapper">
+  
+  <resultMap id="Msg" type="com.jxyd.nole.web.wx.dto.Msg">
+    <result column="nole206_id" property="id" jdbcType="DECIMAL" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="gmt_create" property="date" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="selectMsgs" resultMap="Msg" parameterType="java.util.Map">
+  	SELECT
+		m.nole206_id,
+		m.content,
+		DATE_FORMAT(m.gmt_create,'%Y-%m-%d %H:%i:%S'),
+		CASE WHEN m.type = 'SYS' THEN '1' ELSE '2' END AS type,
+	  CASE WHEN s.`status` = 'READ' THEN '1' ELSE '0' END AS STATUS
+	FROM
+		nole207_msgsend s
+	LEFT JOIN nole206_message m ON s.nole206_id = m.nole206_id
+	WHERE
+		s.nole200_id = #{userId,jdbcType=DECIMAL}
+	order by s.`status` desc ,s.gmt_create desc
+  </select>
+  
+  
+  
+</mapper>

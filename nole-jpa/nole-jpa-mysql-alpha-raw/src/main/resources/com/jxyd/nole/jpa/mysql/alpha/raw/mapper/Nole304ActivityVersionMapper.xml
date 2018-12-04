@@ -1,0 +1,517 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jxyd.nole.jpa.mysql.alpha.raw.mapper.Nole304ActivityVersionMapper">
+  <resultMap id="BaseResultMap" type="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole304ActivityVersion">
+    <id column="nole304_id" jdbcType="BIGINT" property="id" />
+    <result column="nole301_id" jdbcType="BIGINT" property="nole301Id" />
+    <result column="onsale_or_not" jdbcType="CHAR" property="onsaleOrNot" />
+    <result column="version" jdbcType="INTEGER" property="version" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="participant_no" jdbcType="INTEGER" property="participantNo" />
+    <result column="should_no" jdbcType="INTEGER" property="shouldNo" />
+    <result column="actual_no" jdbcType="INTEGER" property="actualNo" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="available_or_not" jdbcType="CHAR" property="availableOrNot" />
+    <result column="activity_subject" jdbcType="VARCHAR" property="activitySubject" />
+    <result column="activity_start" jdbcType="TIMESTAMP" property="activityStart" />
+    <result column="activity_end" jdbcType="TIMESTAMP" property="activityEnd" />
+    <result column="gather_point" jdbcType="VARCHAR" property="gatherPoint" />
+    <result column="gather_time" jdbcType="TIMESTAMP" property="gatherTime" />
+    <result column="frequency_band" jdbcType="VARCHAR" property="frequencyBand" />
+    <result column="power_condition" jdbcType="VARCHAR" property="powerCondition" />
+    <result column="apply_no" jdbcType="INTEGER" property="applyNo" />
+    <result column="max_no" jdbcType="INTEGER" property="maxNo" />
+    <result column="front_money" jdbcType="DECIMAL" property="frontMoney" />
+    <result column="hand_down" jdbcType="TIMESTAMP" property="handDown" />
+    <result column="hand_up" jdbcType="TIMESTAMP" property="handUp" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    `nole304_id`, `nole301_id`, `onsale_or_not`, `version`, `remark`, `participant_no`, 
+    `should_no`, `actual_no`, `gmt_modified`, `gmt_create`, `available_or_not`, `activity_subject`, 
+    `activity_start`, `activity_end`, `gather_point`, `gather_time`, `frequency_band`, 
+    `power_condition`, `apply_no`, `max_no`, `front_money`, `hand_down`, `hand_up`
+  </sql>
+  <select id="selectByExample" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole304ActivityVersionExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from nole304_activity_version
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from nole304_activity_version
+    where `nole304_id` = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from nole304_activity_version
+    where `nole304_id` = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole304ActivityVersionExample">
+    delete from nole304_activity_version
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole304ActivityVersion">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into nole304_activity_version (`nole301_id`, `onsale_or_not`, `version`, 
+      `remark`, `participant_no`, `should_no`, 
+      `actual_no`, `gmt_modified`, `gmt_create`, 
+      `available_or_not`, `activity_subject`, `activity_start`, 
+      `activity_end`, `gather_point`, `gather_time`, 
+      `frequency_band`, `power_condition`, `apply_no`, 
+      `max_no`, `front_money`, `hand_down`, 
+      `hand_up`)
+    values (#{nole301Id,jdbcType=BIGINT}, #{onsaleOrNot,jdbcType=CHAR}, #{version,jdbcType=INTEGER}, 
+      #{remark,jdbcType=VARCHAR}, #{participantNo,jdbcType=INTEGER}, #{shouldNo,jdbcType=INTEGER}, 
+      #{actualNo,jdbcType=INTEGER}, #{gmtModified,jdbcType=TIMESTAMP}, #{gmtCreate,jdbcType=TIMESTAMP}, 
+      #{availableOrNot,jdbcType=CHAR}, #{activitySubject,jdbcType=VARCHAR}, #{activityStart,jdbcType=TIMESTAMP}, 
+      #{activityEnd,jdbcType=TIMESTAMP}, #{gatherPoint,jdbcType=VARCHAR}, #{gatherTime,jdbcType=TIMESTAMP}, 
+      #{frequencyBand,jdbcType=VARCHAR}, #{powerCondition,jdbcType=VARCHAR}, #{applyNo,jdbcType=INTEGER}, 
+      #{maxNo,jdbcType=INTEGER}, #{frontMoney,jdbcType=DECIMAL}, #{handDown,jdbcType=TIMESTAMP}, 
+      #{handUp,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole304ActivityVersion">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into nole304_activity_version
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="nole301Id != null">
+        `nole301_id`,
+      </if>
+      <if test="onsaleOrNot != null">
+        `onsale_or_not`,
+      </if>
+      <if test="version != null">
+        `version`,
+      </if>
+      <if test="remark != null">
+        `remark`,
+      </if>
+      <if test="participantNo != null">
+        `participant_no`,
+      </if>
+      <if test="shouldNo != null">
+        `should_no`,
+      </if>
+      <if test="actualNo != null">
+        `actual_no`,
+      </if>
+      <if test="gmtModified != null">
+        `gmt_modified`,
+      </if>
+      <if test="gmtCreate != null">
+        `gmt_create`,
+      </if>
+      <if test="availableOrNot != null">
+        `available_or_not`,
+      </if>
+      <if test="activitySubject != null">
+        `activity_subject`,
+      </if>
+      <if test="activityStart != null">
+        `activity_start`,
+      </if>
+      <if test="activityEnd != null">
+        `activity_end`,
+      </if>
+      <if test="gatherPoint != null">
+        `gather_point`,
+      </if>
+      <if test="gatherTime != null">
+        `gather_time`,
+      </if>
+      <if test="frequencyBand != null">
+        `frequency_band`,
+      </if>
+      <if test="powerCondition != null">
+        `power_condition`,
+      </if>
+      <if test="applyNo != null">
+        `apply_no`,
+      </if>
+      <if test="maxNo != null">
+        `max_no`,
+      </if>
+      <if test="frontMoney != null">
+        `front_money`,
+      </if>
+      <if test="handDown != null">
+        `hand_down`,
+      </if>
+      <if test="handUp != null">
+        `hand_up`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="nole301Id != null">
+        #{nole301Id,jdbcType=BIGINT},
+      </if>
+      <if test="onsaleOrNot != null">
+        #{onsaleOrNot,jdbcType=CHAR},
+      </if>
+      <if test="version != null">
+        #{version,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="participantNo != null">
+        #{participantNo,jdbcType=INTEGER},
+      </if>
+      <if test="shouldNo != null">
+        #{shouldNo,jdbcType=INTEGER},
+      </if>
+      <if test="actualNo != null">
+        #{actualNo,jdbcType=INTEGER},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="availableOrNot != null">
+        #{availableOrNot,jdbcType=CHAR},
+      </if>
+      <if test="activitySubject != null">
+        #{activitySubject,jdbcType=VARCHAR},
+      </if>
+      <if test="activityStart != null">
+        #{activityStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activityEnd != null">
+        #{activityEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gatherPoint != null">
+        #{gatherPoint,jdbcType=VARCHAR},
+      </if>
+      <if test="gatherTime != null">
+        #{gatherTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frequencyBand != null">
+        #{frequencyBand,jdbcType=VARCHAR},
+      </if>
+      <if test="powerCondition != null">
+        #{powerCondition,jdbcType=VARCHAR},
+      </if>
+      <if test="applyNo != null">
+        #{applyNo,jdbcType=INTEGER},
+      </if>
+      <if test="maxNo != null">
+        #{maxNo,jdbcType=INTEGER},
+      </if>
+      <if test="frontMoney != null">
+        #{frontMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="handDown != null">
+        #{handDown,jdbcType=TIMESTAMP},
+      </if>
+      <if test="handUp != null">
+        #{handUp,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole304ActivityVersionExample" resultType="java.lang.Long">
+    select count(*) from nole304_activity_version
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update nole304_activity_version
+    <set>
+      <if test="record.id != null">
+        `nole304_id` = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.nole301Id != null">
+        `nole301_id` = #{record.nole301Id,jdbcType=BIGINT},
+      </if>
+      <if test="record.onsaleOrNot != null">
+        `onsale_or_not` = #{record.onsaleOrNot,jdbcType=CHAR},
+      </if>
+      <if test="record.version != null">
+        `version` = #{record.version,jdbcType=INTEGER},
+      </if>
+      <if test="record.remark != null">
+        `remark` = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.participantNo != null">
+        `participant_no` = #{record.participantNo,jdbcType=INTEGER},
+      </if>
+      <if test="record.shouldNo != null">
+        `should_no` = #{record.shouldNo,jdbcType=INTEGER},
+      </if>
+      <if test="record.actualNo != null">
+        `actual_no` = #{record.actualNo,jdbcType=INTEGER},
+      </if>
+      <if test="record.gmtModified != null">
+        `gmt_modified` = #{record.gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.gmtCreate != null">
+        `gmt_create` = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.availableOrNot != null">
+        `available_or_not` = #{record.availableOrNot,jdbcType=CHAR},
+      </if>
+      <if test="record.activitySubject != null">
+        `activity_subject` = #{record.activitySubject,jdbcType=VARCHAR},
+      </if>
+      <if test="record.activityStart != null">
+        `activity_start` = #{record.activityStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.activityEnd != null">
+        `activity_end` = #{record.activityEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.gatherPoint != null">
+        `gather_point` = #{record.gatherPoint,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gatherTime != null">
+        `gather_time` = #{record.gatherTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.frequencyBand != null">
+        `frequency_band` = #{record.frequencyBand,jdbcType=VARCHAR},
+      </if>
+      <if test="record.powerCondition != null">
+        `power_condition` = #{record.powerCondition,jdbcType=VARCHAR},
+      </if>
+      <if test="record.applyNo != null">
+        `apply_no` = #{record.applyNo,jdbcType=INTEGER},
+      </if>
+      <if test="record.maxNo != null">
+        `max_no` = #{record.maxNo,jdbcType=INTEGER},
+      </if>
+      <if test="record.frontMoney != null">
+        `front_money` = #{record.frontMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="record.handDown != null">
+        `hand_down` = #{record.handDown,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.handUp != null">
+        `hand_up` = #{record.handUp,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update nole304_activity_version
+    set `nole304_id` = #{record.id,jdbcType=BIGINT},
+      `nole301_id` = #{record.nole301Id,jdbcType=BIGINT},
+      `onsale_or_not` = #{record.onsaleOrNot,jdbcType=CHAR},
+      `version` = #{record.version,jdbcType=INTEGER},
+      `remark` = #{record.remark,jdbcType=VARCHAR},
+      `participant_no` = #{record.participantNo,jdbcType=INTEGER},
+      `should_no` = #{record.shouldNo,jdbcType=INTEGER},
+      `actual_no` = #{record.actualNo,jdbcType=INTEGER},
+      `gmt_modified` = #{record.gmtModified,jdbcType=TIMESTAMP},
+      `gmt_create` = #{record.gmtCreate,jdbcType=TIMESTAMP},
+      `available_or_not` = #{record.availableOrNot,jdbcType=CHAR},
+      `activity_subject` = #{record.activitySubject,jdbcType=VARCHAR},
+      `activity_start` = #{record.activityStart,jdbcType=TIMESTAMP},
+      `activity_end` = #{record.activityEnd,jdbcType=TIMESTAMP},
+      `gather_point` = #{record.gatherPoint,jdbcType=VARCHAR},
+      `gather_time` = #{record.gatherTime,jdbcType=TIMESTAMP},
+      `frequency_band` = #{record.frequencyBand,jdbcType=VARCHAR},
+      `power_condition` = #{record.powerCondition,jdbcType=VARCHAR},
+      `apply_no` = #{record.applyNo,jdbcType=INTEGER},
+      `max_no` = #{record.maxNo,jdbcType=INTEGER},
+      `front_money` = #{record.frontMoney,jdbcType=DECIMAL},
+      `hand_down` = #{record.handDown,jdbcType=TIMESTAMP},
+      `hand_up` = #{record.handUp,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole304ActivityVersion">
+    update nole304_activity_version
+    <set>
+      <if test="nole301Id != null">
+        `nole301_id` = #{nole301Id,jdbcType=BIGINT},
+      </if>
+      <if test="onsaleOrNot != null">
+        `onsale_or_not` = #{onsaleOrNot,jdbcType=CHAR},
+      </if>
+      <if test="version != null">
+        `version` = #{version,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        `remark` = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="participantNo != null">
+        `participant_no` = #{participantNo,jdbcType=INTEGER},
+      </if>
+      <if test="shouldNo != null">
+        `should_no` = #{shouldNo,jdbcType=INTEGER},
+      </if>
+      <if test="actualNo != null">
+        `actual_no` = #{actualNo,jdbcType=INTEGER},
+      </if>
+      <if test="gmtModified != null">
+        `gmt_modified` = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtCreate != null">
+        `gmt_create` = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="availableOrNot != null">
+        `available_or_not` = #{availableOrNot,jdbcType=CHAR},
+      </if>
+      <if test="activitySubject != null">
+        `activity_subject` = #{activitySubject,jdbcType=VARCHAR},
+      </if>
+      <if test="activityStart != null">
+        `activity_start` = #{activityStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activityEnd != null">
+        `activity_end` = #{activityEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gatherPoint != null">
+        `gather_point` = #{gatherPoint,jdbcType=VARCHAR},
+      </if>
+      <if test="gatherTime != null">
+        `gather_time` = #{gatherTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="frequencyBand != null">
+        `frequency_band` = #{frequencyBand,jdbcType=VARCHAR},
+      </if>
+      <if test="powerCondition != null">
+        `power_condition` = #{powerCondition,jdbcType=VARCHAR},
+      </if>
+      <if test="applyNo != null">
+        `apply_no` = #{applyNo,jdbcType=INTEGER},
+      </if>
+      <if test="maxNo != null">
+        `max_no` = #{maxNo,jdbcType=INTEGER},
+      </if>
+      <if test="frontMoney != null">
+        `front_money` = #{frontMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="handDown != null">
+        `hand_down` = #{handDown,jdbcType=TIMESTAMP},
+      </if>
+      <if test="handUp != null">
+        `hand_up` = #{handUp,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where `nole304_id` = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole304ActivityVersion">
+    update nole304_activity_version
+    set `nole301_id` = #{nole301Id,jdbcType=BIGINT},
+      `onsale_or_not` = #{onsaleOrNot,jdbcType=CHAR},
+      `version` = #{version,jdbcType=INTEGER},
+      `remark` = #{remark,jdbcType=VARCHAR},
+      `participant_no` = #{participantNo,jdbcType=INTEGER},
+      `should_no` = #{shouldNo,jdbcType=INTEGER},
+      `actual_no` = #{actualNo,jdbcType=INTEGER},
+      `gmt_modified` = #{gmtModified,jdbcType=TIMESTAMP},
+      `gmt_create` = #{gmtCreate,jdbcType=TIMESTAMP},
+      `available_or_not` = #{availableOrNot,jdbcType=CHAR},
+      `activity_subject` = #{activitySubject,jdbcType=VARCHAR},
+      `activity_start` = #{activityStart,jdbcType=TIMESTAMP},
+      `activity_end` = #{activityEnd,jdbcType=TIMESTAMP},
+      `gather_point` = #{gatherPoint,jdbcType=VARCHAR},
+      `gather_time` = #{gatherTime,jdbcType=TIMESTAMP},
+      `frequency_band` = #{frequencyBand,jdbcType=VARCHAR},
+      `power_condition` = #{powerCondition,jdbcType=VARCHAR},
+      `apply_no` = #{applyNo,jdbcType=INTEGER},
+      `max_no` = #{maxNo,jdbcType=INTEGER},
+      `front_money` = #{frontMoney,jdbcType=DECIMAL},
+      `hand_down` = #{handDown,jdbcType=TIMESTAMP},
+      `hand_up` = #{handUp,jdbcType=TIMESTAMP}
+    where `nole304_id` = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByExampleWithRowbounds" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Nole304ActivityVersionExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from nole304_activity_version
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByIndex1" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select * from nole304_activity_version
+    <where>
+      and `nole301_id` = #{nole301Id,jdbcType=BIGINT}
+      and `version` = #{version,jdbcType=INTEGER}
+    </where>
+  </select>
+</mapper>

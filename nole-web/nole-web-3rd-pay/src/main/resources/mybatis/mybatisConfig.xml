@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- mybatisConfig.xml -->
+	<settings>
+		<setting name="lazyLoadingEnabled" value="true" />
+		<setting name="aggressiveLazyLoading" value="false" />
+		<setting name="cacheEnabled" value="false" />
+        <setting name="defaultExecutorType" value="REUSE" />
+	</settings>
+	
+	<plugins>
+		<plugin interceptor="com.jxyd.nole.jpa.mybatis.plugin.sh.PreparePlugin">
+			<property name="dialect" value="mysql" />
+		</plugin>
+		<plugin interceptor="com.jxyd.nole.jpa.mybatis.plugin.sh.QueryPlugin" >
+			<property name="dialect" value="mysql" />
+		</plugin>
+		<plugin interceptor="com.jxyd.nole.jpa.mybatis.plugin.sh.UpdatePlugin" >
+			<property name="dialect" value="mysql" />
+		</plugin>
+	</plugins>
+</configuration>

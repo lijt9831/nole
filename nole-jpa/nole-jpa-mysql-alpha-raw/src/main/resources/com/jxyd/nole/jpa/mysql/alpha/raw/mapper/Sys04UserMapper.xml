@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jxyd.nole.jpa.mysql.alpha.raw.mapper.Sys04UserMapper">
+  <resultMap id="BaseResultMap" type="com.jxyd.nole.jpa.mysql.alpha.raw.model.Sys04User">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="password_salt" jdbcType="VARCHAR" property="passwordSalt" />
+    <result column="account_mobile" jdbcType="VARCHAR" property="accountMobile" />
+    <result column="account_email" jdbcType="VARCHAR" property="accountEmail" />
+    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+    <result column="validate_status_mobile" jdbcType="INTEGER" property="validateStatusMobile" />
+    <result column="validate_status_email" jdbcType="INTEGER" property="validateStatusEmail" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    `id`, `username`, `password`, `password_salt`, `account_mobile`, `account_email`, 
+    `nickname`, `validate_status_mobile`, `validate_status_email`, `create_time`
+  </sql>
+  <select id="selectByExample" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Sys04UserExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from sys04_user
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sys04_user
+    where `id` = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from sys04_user
+    where `id` = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Sys04UserExample">
+    delete from sys04_user
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Sys04User">
+    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into sys04_user (`id`, `username`, `password`, 
+      `password_salt`, `account_mobile`, `account_email`, 
+      `nickname`, `validate_status_mobile`, `validate_status_email`, 
+      `create_time`)
+    values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{passwordSalt,jdbcType=VARCHAR}, #{accountMobile,jdbcType=VARCHAR}, #{accountEmail,jdbcType=VARCHAR}, 
+      #{nickname,jdbcType=VARCHAR}, #{validateStatusMobile,jdbcType=INTEGER}, #{validateStatusEmail,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Sys04User">
+    <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into sys04_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      `id`,
+      <if test="username != null">
+        `username`,
+      </if>
+      <if test="password != null">
+        `password`,
+      </if>
+      <if test="passwordSalt != null">
+        `password_salt`,
+      </if>
+      <if test="accountMobile != null">
+        `account_mobile`,
+      </if>
+      <if test="accountEmail != null">
+        `account_email`,
+      </if>
+      <if test="nickname != null">
+        `nickname`,
+      </if>
+      <if test="validateStatusMobile != null">
+        `validate_status_mobile`,
+      </if>
+      <if test="validateStatusEmail != null">
+        `validate_status_email`,
+      </if>
+      <if test="createTime != null">
+        `create_time`,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      #{id,jdbcType=INTEGER},
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="passwordSalt != null">
+        #{passwordSalt,jdbcType=VARCHAR},
+      </if>
+      <if test="accountMobile != null">
+        #{accountMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="accountEmail != null">
+        #{accountEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null">
+        #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="validateStatusMobile != null">
+        #{validateStatusMobile,jdbcType=INTEGER},
+      </if>
+      <if test="validateStatusEmail != null">
+        #{validateStatusEmail,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Sys04UserExample" resultType="java.lang.Long">
+    select count(*) from sys04_user
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update sys04_user
+    <set>
+      <if test="record.id != null">
+        `id` = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.username != null">
+        `username` = #{record.username,jdbcType=VARCHAR},
+      </if>
+      <if test="record.password != null">
+        `password` = #{record.password,jdbcType=VARCHAR},
+      </if>
+      <if test="record.passwordSalt != null">
+        `password_salt` = #{record.passwordSalt,jdbcType=VARCHAR},
+      </if>
+      <if test="record.accountMobile != null">
+        `account_mobile` = #{record.accountMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="record.accountEmail != null">
+        `account_email` = #{record.accountEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="record.nickname != null">
+        `nickname` = #{record.nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.validateStatusMobile != null">
+        `validate_status_mobile` = #{record.validateStatusMobile,jdbcType=INTEGER},
+      </if>
+      <if test="record.validateStatusEmail != null">
+        `validate_status_email` = #{record.validateStatusEmail,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null">
+        `create_time` = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update sys04_user
+    set `id` = #{record.id,jdbcType=INTEGER},
+      `username` = #{record.username,jdbcType=VARCHAR},
+      `password` = #{record.password,jdbcType=VARCHAR},
+      `password_salt` = #{record.passwordSalt,jdbcType=VARCHAR},
+      `account_mobile` = #{record.accountMobile,jdbcType=VARCHAR},
+      `account_email` = #{record.accountEmail,jdbcType=VARCHAR},
+      `nickname` = #{record.nickname,jdbcType=VARCHAR},
+      `validate_status_mobile` = #{record.validateStatusMobile,jdbcType=INTEGER},
+      `validate_status_email` = #{record.validateStatusEmail,jdbcType=INTEGER},
+      `create_time` = #{record.createTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Sys04User">
+    update sys04_user
+    <set>
+      <if test="username != null">
+        `username` = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        `password` = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="passwordSalt != null">
+        `password_salt` = #{passwordSalt,jdbcType=VARCHAR},
+      </if>
+      <if test="accountMobile != null">
+        `account_mobile` = #{accountMobile,jdbcType=VARCHAR},
+      </if>
+      <if test="accountEmail != null">
+        `account_email` = #{accountEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null">
+        `nickname` = #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="validateStatusMobile != null">
+        `validate_status_mobile` = #{validateStatusMobile,jdbcType=INTEGER},
+      </if>
+      <if test="validateStatusEmail != null">
+        `validate_status_email` = #{validateStatusEmail,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        `create_time` = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Sys04User">
+    update sys04_user
+    set `username` = #{username,jdbcType=VARCHAR},
+      `password` = #{password,jdbcType=VARCHAR},
+      `password_salt` = #{passwordSalt,jdbcType=VARCHAR},
+      `account_mobile` = #{accountMobile,jdbcType=VARCHAR},
+      `account_email` = #{accountEmail,jdbcType=VARCHAR},
+      `nickname` = #{nickname,jdbcType=VARCHAR},
+      `validate_status_mobile` = #{validateStatusMobile,jdbcType=INTEGER},
+      `validate_status_email` = #{validateStatusEmail,jdbcType=INTEGER},
+      `create_time` = #{createTime,jdbcType=TIMESTAMP}
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByExampleWithRowbounds" parameterType="com.jxyd.nole.jpa.mysql.alpha.raw.model.Sys04UserExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from sys04_user
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+</mapper>

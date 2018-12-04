@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jxyd.nole.web.wx.mysql.alpha.mapper.LineMapper">
+  
+  <resultMap id="Hot" type="com.jxyd.nole.web.wx.dto.HotLineStandard">
+    <result column="nole400_id" property="lineId" jdbcType="DECIMAL" />
+    <result column="want_no" property="wantNo" jdbcType="DECIMAL" />
+    <result column="view_no" property="viewNo" jdbcType="DECIMAL" />
+    <result column="date" property="date" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <resultMap id="LineCover" type="com.jxyd.nole.web.wx.dto.LineCover">
+  	<result column="nole400_id" property="id" jdbcType="DECIMAL" />
+  	<result column="view_no" property="eyeNo" jdbcType="DECIMAL" />
+  	<result column="line_title" property="title" jdbcType="VARCHAR" />
+  	<result column="pic_path" property="coverPicPath" jdbcType="VARCHAR" />
+  	<result column="map_params" property="location" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="Line" type="com.jxyd.nole.web.wx.dto.Line">
+    <result column="paramLength" property="paramLength" jdbcType="VARCHAR" />
+    <result column="paramMaxGradient" property="paramMaxGradient" jdbcType="VARCHAR" />
+    <result column="paramElevation" property="paramElevation" jdbcType="VARCHAR" />
+    <result column="paramDowntownDistance" property="paramDowntownDistance" jdbcType="VARCHAR" />
+    <result column="roadCondition" property="roadCondition" jdbcType="VARCHAR" />
+    <result column="want_no" property="wantNo" jdbcType="DECIMAL" />
+    <result column="wanted" property="wanted" jdbcType="VARCHAR" />
+  </resultMap>
+  
+<!--   附属列表 -->
+  <resultMap id="Car" type="com.jxyd.nole.web.wx.dto.Car" >
+  	<result column="icon_path" property="iconPath" jdbcType="VARCHAR" />
+  	<result column="car" property="car" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="Equipment" type="com.jxyd.nole.web.wx.dto.Equipment" >
+  	<result column="equipment" property="equipment" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="Fit" type="com.jxyd.nole.web.wx.dto.Fit" >
+  	<result column="activity_type" property="fit" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="Person" type="com.jxyd.nole.web.wx.dto.Person" >
+  	<result column="people" property="person" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="Pic" type="com.jxyd.nole.web.wx.dto.Pic" >
+  	<result column="pic_path" property="picPath" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="selectHotList" resultMap="Hot">
+  SELECT
+		*
+	FROM
+		(
+			SELECT
+				l.nole400_id,
+				(SELECT count(*) FROM nole408_footprint f WHERE f.nole400_id = l.nole400_id ) AS view_no,
+				(SELECT count(*) FROM nole401_wanto w WHERE w.nole400_id = l.nole400_id ) AS want_no,
+				l.gmt_modified
+			FROM
+				nole400_line l
+			WHERE
+				l.`status` = 'ONLINE'
+		) m
+	ORDER BY
+		want_no DESC,
+		view_no DESC,
+		gmt_modified DESC
+  </select>
+  
+  <sql id="LineCoverSQL">
+  SELECT
+		l.nole400_id,
+		l.line_title,
+		(SELECT count(*) FROM nole408_footprint f WHERE f.nole400_id = l.nole400_id ) AS view_no,
+		p.pic_path,
+		l.map_params
+	FROM
+		nole400_line l
+	LEFT JOIN nole404_pics p ON l.nole400_id = p.nole404_id AND p.pic_type = 'COVER'
+	WHERE
+		l.`status` = 'ONLINE'
+  </sql>
+  <select id="selectLineCoverById" resultMap="LineCover" parameterType="java.util.Map">
+  	 <include refid="LineCoverSQL"></include>
+  	 and l.nole400_id = #{id,jdbcType=DECIMAL}
+  </select>
+  
+  <select id="selectLineCoverByTypeId" resultMap="LineCover" parameterType="java.util.Map">
+    <include refid="LineCoverSQL"></include>
+  	AND l.nole400_id IN ( SELECT fit.nole400_id FROM nole402_fit fit WHERE fit.nole300_id = #{typeId,jdbcType=DECIMAL} )
+  </select>
+
+  <select id="selectLineCoverWantgo" resultMap="LineCover" parameterType="java.util.Map">
+    <include refid="LineCoverSQL"></include>
+  	AND l.nole400_id IN ( SELECT w.nole400_id FROM nole401_wanto w WHERE w.nole200_id = #{userId,jdbcType=DECIMAL} )
+  </select>
+  
+  <select id="selectLine" resultMap="Line" parameterType="java.util.Map">
+  	SELECT
+		l.nole400_id,
+		l.gmt_modified,
+		l.paramLength,
+		l.paramMaxGradient,
+		l.paramElevation,
+		l.paramDowntownDistance,
+		l.paramRoadCondition,
+		(SELECT count(*) FROM nole401_wanto w WHERE w.nole400_id = l.nole400_id ) AS want_no,
+    case when w.nole401_id is null then '0' else '1' end as wanted
+	FROM
+		nole400_line l
+	left join nole401_wanto w on l.nole400_id = w.nole400_id and w.nole200_id = #{userId,jdbcType=DECIMAL}
+	WHERE
+		l.`status` = 'ONLINE' and l.nole400_id = #{lineId,jdbcType=DECIMAL}
+  </select>
+  
+  <select id="selectCar" parameterType="java.util.Map" resultMap="Car">
+  	SELECT c.car,c.icon_path FROM nole406_recommend_car r LEFT JOIN nole015_car c ON r.nole015_id = c.nole015_id
+	WHERE r.nole400_id = #{lineId,jdbcType=DECIMAL}
+	ORDER BY c.orderr ASC
+  </select>
+  <select id="selectEquipment" parameterType="java.util.Map" resultMap="Equipment">
+ 	SELECT e.equitment
+	FROM nole407_recommend_equip r LEFT JOIN nole016_equitment e ON r.nole016_id = e.nole016_id
+	WHERE r.nole400_id = #{lineId,jdbcType=DECIMAL}
+	ORDER BY e.orderr ASC
+  </select>
+  <select id="selectFit" parameterType="java.util.Map" resultMap="Fit">
+  	SELECT a.activity_type
+	FROM nole402_fit f LEFT JOIN nole300_activity_type a ON f.nole300_id = a.nole300_id
+	WHERE f.nole400_id = #{lineId,jdbcType=DECIMAL}
+  </select>
+  <select id="selectPerson" parameterType="java.util.Map" resultMap="Person">
+  	SELECT p.people
+	FROM nole405_recommend_people r LEFT JOIN nole014_people p ON r.nole014_id = p.nole014_id
+	WHERE r.nole400_id = #{lineId,jdbcType=DECIMAL}
+	ORDER BY p.orderr ASC
+  </select>
+  <select id="selectPic" parameterType="java.util.Map" resultMap="Pic">
+  	 SELECT p.pic_path from nole404_pics p where p.nole400_id = #{lineId,jdbcType=DECIMAL} order by p.pic_order asc
+  </select>
+  
+</mapper>

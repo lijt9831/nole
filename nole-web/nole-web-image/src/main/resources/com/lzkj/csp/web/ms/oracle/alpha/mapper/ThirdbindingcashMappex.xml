@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jxyd.nole.web.image.oracle.alpha.mapper.ThirdbindingcashMappex">
+  
+  <resultMap id="BaseResultMap" type="com.jxyd.nole.web.image.oracle.alpha.model.ThirdbindingcashExt">
+    <id column="CS108_ID" jdbcType="DECIMAL" property="cs108Id" />
+    <result column="CS100_ID" jdbcType="DECIMAL" property="cs100Id" />
+    <result column="CS107_ID" jdbcType="DECIMAL" property="cs107Id" />
+    <result column="CASH_NUM" jdbcType="DECIMAL" property="cashNum" />
+    <result column="TRANSACTION_NUM" jdbcType="DECIMAL" property="transactionNum" />
+    <result column="TAX_NUM" jdbcType="DECIMAL" property="taxNum" />
+    <result column="GMP_CREATE" jdbcType="TIMESTAMP" property="gmpCreate" />
+    <result column="STATUS" jdbcType="VARCHAR" property="status" />
+    <result column="GMT_CHECK" jdbcType="TIMESTAMP" property="gmtCheck" />
+    <result column="GMP_TRANSACTION" jdbcType="TIMESTAMP" property="gmpTransaction" />
+    <result column="GMT_FINISH" jdbcType="TIMESTAMP" property="gmtFinish" />
+    <result column="TRANSACTION_ID" jdbcType="VARCHAR" property="transactionId" />
+    <result column="CASH_DESC" jdbcType="VARCHAR" property="cashDesc" />
+    <result column="PROCESS_FAIL_STATUS" jdbcType="VARCHAR" property="processFailStatus" />
+    <result column="sdk_username" jdbcType="VARCHAR" property="sdkUserName" />
+ 
+  </resultMap>
+ 
+  <sql id="Base_Column_List">
+    CS108_ID, CS100_ID, CS107_ID, CASH_NUM, TRANSACTION_NUM, TAX_NUM, GMP_CREATE, STATUS, 
+    GMT_CHECK, GMP_TRANSACTION, GMT_FINISH, TRANSACTION_ID, CASH_DESC, PROCESS_FAIL_STATUS
+  </sql>
+  
+  <select id="selectByExampleWithRowbounds" parameterType="com.jxyd.nole.web.image.oracle.alpha.model.ThirdbindingcashExt" resultMap="BaseResultMap">
+    select t.*,u.sdk_username
+    from cs108_thirdbindingcash t
+	left join cs100_appuser u
+	on t.cs100_id = u.cs100_id
+	and u.status='UNFREEZE'
+    where 1=1 
+    
+    <if test="sdkUserName!=null and sdkUserName != ''">
+        and u.sdk_username = #{sdkUserName}
+    </if>
+    
+    <if test="gmpCreateStart != null">
+  		<![CDATA[ AND t.gmp_create >= #{gmpCreateStart}]]>
+  	</if>
+  	
+  	<if test="gmpCreateEnd != null">
+  		<![CDATA[ AND t.gmp_create <= #{gmpCreateEnd}]]>
+  	</if>
+  	
+  	<if test="status!=null and status != ''">
+        and  t.status = #{status}
+    </if>
+    
+    <if test="cs100Id!=null">
+        and t.cs100_id = #{cs100Id}
+    </if>
+    
+    order by t.gmp_create DESC
+  </select>
+  
+  <!-- 提现审核(拒绝) -->
+  <update id="updateExamineRefuse" parameterType="com.jxyd.jpa.oracle.alpha.raw.model.Cs108Thirdbindingcash">
+		UPDATE cs108_thirdbindingcash t
+		SET t.STATUS = 'ORDER_CHECK_REFUSE',
+		t.CASH_DESC = #{cashDesc,jdbcType=VARCHAR},
+		t.gmt_check = SYSDATE 
+		WHERE t.cs108_id = #{cs108Id} 
+		AND t.STATUS = 'ORDER_CREATE'
+		AND NOT EXISTS  
+		(	
+			SELECT * FROM cs100_appuser u 
+			WHERE t.cs100_id = u.cs100_id
+			and u.status='FREEZE'
+		) 
+	</update>
+	
+  <!-- 提现审核通过(批量) -->
+  <update id="updateBatchExamineAdopt" >
+	
+		UPDATE cs108_thirdbindingcash t 
+		SET t.status = 'ORDER_CHECK_SUCCESS' , 
+		t.gmt_check = SYSDATE  
+		
+		WHERE t.status = 'ORDER_CREATE' AND  t.cs108_id IN 
+		
+	    <foreach item="item" index="ind" collection="array" open="(" separator="," close=")">
+	        #{item}
+	    </foreach>
+		AND NOT EXISTS  
+		(	
+			SELECT * FROM cs100_appuser u 
+			WHERE t.cs100_id = u.cs100_id
+			and u.status='FREEZE'
+		) 
+	</update>
+	
+	  
+	<select id="countFreezeUserByCs108"  resultType="int">
+     select count(*)
+    	from cs108_thirdbindingcash t
+		, cs100_appuser u
+		where t.cs100_id = u.cs100_id
+		and u.status='FREEZE'
+   		AND t.cs108_id IN 
+	    <foreach item="item" index="ind" collection="array" open="(" separator="," close=")">
+	        #{item}
+	    </foreach>
+  	</select>
+  
+</mapper>

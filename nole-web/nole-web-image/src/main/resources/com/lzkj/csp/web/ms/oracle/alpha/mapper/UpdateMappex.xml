@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jxyd.nole.web.image.oracle.alpha.mapper.UpdateMappex">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.jxyd.jpa.oracle.alpha.raw.model.Cs000Update">
+        <id column="CS000_ID" jdbcType="DECIMAL" property="cs000Id"/>
+        <result column="OLDVERSION" jdbcType="VARCHAR" property="oldversion"/>
+        <result column="NEWVERSION" jdbcType="VARCHAR" property="newversion"/>
+        <result column="UPDATEURL" jdbcType="VARCHAR" property="updateurl"/>
+        <result column="UPDATEDESC" jdbcType="VARCHAR" property="updatedesc"/>
+        <result column="UPDATETYPE" jdbcType="VARCHAR" property="updatetype"/>
+        <result column="GMT_CREATE" jdbcType="TIMESTAMP" property="gmtCreate"/>
+        <result column="GMT_UPDATE" jdbcType="TIMESTAMP" property="gmtUpdate"/>
+        <result column="UPDATE_STATUS" jdbcType="VARCHAR" property="updateStatus"/>
+    </resultMap>
+
+    <select id="selectOneByVersion" resultMap="BaseResultMap">
+        SELECT
+          LISTAGG(OLDVERSION, ',') WITHIN GROUP(ORDER BY OLDVERSION) AS OLD_VERSIONS,
+          NEWVERSION,UPDATEURL,UPDATEDESC,UPDATETYPE,max(GMT_CREATE) as GMT_CREATE,max(GMT_UPDATE) as GMT_UPDATE,UPDATE_STATUS
+          from cs000_update
+        where
+        <![CDATA[ update_status <> 'DELETE' ]]>
+        and   NEWVERSION = #{version,jdbcType=VARCHAR}
+        group by NEWVERSION,UPDATEURL,UPDATEDESC,UPDATETYPE,UPDATE_STATUS
+    </select>
+
+
+    <select id="selectOldVersionListByNewVersion" resultMap="BaseResultMap">
+        SELECT OLDVERSION,UPDATETYPE from cs000_update
+        where
+             <![CDATA[ update_status <> 'DELETE' ]]>
+           and  NEWVERSION = #{version,jdbcType=VARCHAR}
+    </select>
+
+
+    <select id="getReleaseVersion" resultType="java.lang.String">
+        SELECT distinct NEWVERSION from cs000_update
+        where UPDATE_STATUS = 'ENABLE'
+    </select>
+
+    <update id="updateStatusByVersion">
+        update cs000_update
+        set UPDATE_STATUS = #{status,jdbcType=VARCHAR}
+        where NEWVERSION = #{version,jdbcType=VARCHAR}
+    </update>
+
+</mapper>

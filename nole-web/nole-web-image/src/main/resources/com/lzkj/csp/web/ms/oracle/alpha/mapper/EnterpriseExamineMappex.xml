@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jxyd.nole.web.image.oracle.alpha.mapper.EnterpriseExamineMappex">
+
+    <resultMap id="BaseResultMap" type="com.jxyd.nole.web.image.oracle.alpha.model.EnterpriseExamineView">
+        <id column="CS200_ID" jdbcType="DECIMAL" property="cs200Id" />
+        <result column="COMPANY_LOGINUSER" jdbcType="VARCHAR" property="companyLoginuser" />
+        <result column="COMPANY_NAME" jdbcType="VARCHAR" property="companyName" />
+        <result column="COMPANY_OWN" jdbcType="VARCHAR" property="companyOwn" />
+        <result column="COMPANY_PIC_PATH" jdbcType="VARCHAR" property="companyPicPath" />
+        <result column="CHECK_STATUS" jdbcType="VARCHAR" property="checkStatus" /> 
+    </resultMap>
+    
+    
+    <select id="enterpriseExamineList" parameterType="com.jxyd.nole.web.image.oracle.alpha.model.EnterpriseExamineParam" resultMap="BaseResultMap">
+    	SELECT CS200_ID,COMPANY_LOGINUSER,COMPANY_NAME,COMPANY_OWN,COMPANY_PIC_PATH,CHECK_STATUS FROM CS200_COMPANY
+    	WHERE OFFICIAL =  'OTHOR_COMPANY' AND COMPANY_PIC_PATH IS NOT NULL AND COMPANY_NAME IS NOT NULL AND COMPANY_OWN IS NOT NULL
+    		<if test="checkStatus != null and checkStatus !=''">
+    			AND CHECK_STATUS = #{checkStatus}
+    		</if>
+    		<if test="companyLoginuser != null and companyLoginuser !=''">
+    			AND	COMPANY_LOGINUSER = #{companyLoginuser}
+    		</if>
+    		<if test="companyName != null and companyName !=''">
+    			AND	COMPANY_NAME = #{companyName}
+    		</if>
+    	ORDER BY GMT_UPDATE DESC
+    </select>
+    
+    
+    <update id="enterpriseExamineOperation" parameterType="com.jxyd.nole.web.image.oracle.alpha.model.EnterpriseExamineParam" >
+    
+    	UPDATE CS200_COMPANY SET CHECK_STATUS = #{checkStatus} ,
+    		<if test="note != null and note != ''">
+    			 NOTE = #{note} ,
+    		</if>
+    	GMT_UPDATE = SYSDATE WHERE CS200_ID = #{cs200Id} AND CHECK_STATUS = 'CHECK_COMMIT'
+    	
+    
+    </update>
+    
+
+</mapper>

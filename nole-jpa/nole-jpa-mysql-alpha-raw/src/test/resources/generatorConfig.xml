@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+
+  <context id="mysqlTables" targetRuntime="MyBatis3">
+  
+  	<property name="beginningDelimiter" value="`"/>
+    <property name="endingDelimiter" value="`"/>
+  
+  	<plugin type="org.mybatis.generator.plugins.CaseInsensitiveLikePlugin"></plugin>
+	<plugin type="org.mybatis.generator.plugins.RowBoundsPlugin"></plugin>
+	<plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+	<plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+	
+
+	    
+    <commentGenerator>
+      <property name="suppressAllComments" value="true" />
+      <property name="suppressDate" value="true" />
+    </commentGenerator>
+    
+    <jdbcConnection 
+   		driverClass="com.mysql.jdbc.Driver"
+        connectionURL="jdbc:mysql://139.199.97.176:3306/nole_dev?useSSL=false"
+        userId="root"
+        password="mNp678rx&lt;+">
+    </jdbcConnection>
+    
+    <javaTypeResolver >
+      <property name="forceBigDecimals" value="false" />
+    </javaTypeResolver>
+    
+    <!--  Plain Ordinary Java Object -->
+    <javaModelGenerator targetPackage="com.jxyd.nole.jpa.mysql.alpha.raw.model" targetProject="src/main/java">
+      <property name="enableSubPackages" value="false" />
+      <property name="trimStrings" value="true" />
+    </javaModelGenerator>
+    
+    <!-- sql -->
+    <sqlMapGenerator targetPackage="com.jxyd.nole.jpa.mysql.alpha.raw.mapper"  targetProject="src/main/resources">
+      <property name="enableSubPackages" value="false" />
+    </sqlMapGenerator>
+    
+    <!--  Data Access Object -->
+    <javaClientGenerator type="XMLMAPPER" targetPackage="com.jxyd.nole.jpa.mysql.alpha.raw.mapper"  targetProject="src/main/java">
+      <property name="enableSubPackages" value="false" />
+    </javaClientGenerator>
+    
+    <table tableName="sys01_permission" domainObjectName="Sys01Permission" schema="root" delimitAllColumns="true">
+    <generatedKey column="id" sqlStatement="MySql"></generatedKey></table>
+
+    <table tableName="sys02_role" domainObjectName="Sys02Role" schema="root" delimitAllColumns="true">
+    <generatedKey column="id" sqlStatement="MySql"></generatedKey></table>
+
+    <table tableName="sys03_role_permission_link" domainObjectName="Sys03RolePermissionLink" schema="root" delimitAllColumns="true"></table>
+	
+    <table tableName="sys04_user" domainObjectName="Sys04User" schema="root" delimitAllColumns="true">
+    <generatedKey column="id" sqlStatement="MySql"></generatedKey></table>
+	
+    <table tableName="sys05_user_role_link" domainObjectName="Sys05UserRoleLink" schema="root" delimitAllColumns="true"></table>
+	
+
+
+    
+
+
+    <table tableName="nole010_authc_log" domainObjectName="Nole010AuthcLog" schema="root" delimitAllColumns="true">
+    <generatedKey column="nole010_id" sqlStatement="MySql" identity="true" />
+    <columnRenamingRule searchString="nole010_id" replaceString="id"/></table>
+
+    <table tableName="nole011_opration_log" domainObjectName="Nole011OprationLog" schema="root" delimitAllColumns="true">
+    <generatedKey column="nole011_id" sqlStatement="MySql" identity="true" />
+    <columnRenamingRule searchString="nole011_id" replaceString="id"/></table>
+
+    <table tableName="nole014_people" domainObjectName="Nole014People" schema="root" delimitAllColumns="true">
+    <generatedKey column="nole014_id" sqlStatement="MySql" identity="true" />
+    <columnRenamingRule searchString="nole014_id" replaceString="id"/></table>
+
+    <table tableName="nole015_car" domainObjectName="Nole015Car" schema="root" delimitAllColumns="true">
+    <generatedKey column="nole015_id" sqlStatement="MySql" identity="true" />
+    <columnRenamingRule searchString="nole015_id" replaceString="id"/></table>
+
+    <table tableName="nole016_equitment" domainObjectName="Nole016Equitment" schema="root" delimitAllColumns="true">
+    <generatedKey column="nole016_id" sqlStatement="MySql" identity="true" />
+    <columnRenamingRule searchString="nole016_id" replaceString="id"/></table>
+
+    <table tableName="nole017_loop" domainObjectName="Nole017Loop" schema="root" delimitAllColumns="true">
+    <generatedKey column="nole017_id" sqlStatement="MySql" identity="true" />
+    <columnRenamingRule searchString="nole017_id" replaceString="id"/></table>
+
+    <table tableName="nole200_user" domainObjectName="Nole200User" schema="root" delimitAllColumns="true">
+    <generatedKey column="nole200_id" sqlStatement="MySql" identity="true" />
+    <columnRenamingRule searchString="nole200_id" replaceString="id"/></table>
+
+    <table tableName="nole201_fan" domainObjectName="Nole201Fan" schema="root" delimitAllColumns="true">
+    <generatedKey column="nole201_id" sqlStatement="MySql" identity="true" />
+    <columnRenamingRule searchString="nole201_id" replaceString="id"/></table>
+
+    <table tableName="nole202_footprint" domainObjectName="Nole202Footprint" schema="root" delimitAllColumns="true">
+    <generatedKey column="nole202_id" sqlStatement="MySql" identity="true" />
+    <columnRenamingRule searchString="nole202_id" replaceString="id"/></table>
+
+    <table tableName="nole203_talk" domainObjectName="Nole203Talk" schema="root" delimitAllColumns="true">
+    <generatedKey column="nole203_id" sqlStatement="MySql" identity="true" />
+    <columnRenamingRule searchString="nole203_id" replaceString="id"/></table>
+
+    <table tableName="nole204_favour" domainObjectName="Nole204Favour" schema="root" delimitAllColumns="true">
+    <generatedKey column="nole204_id" sqlStatement="MySql" identity="true" />
+    <columnRenamingRule searchString="nole204_id" replaceString="id"/></table>
+
+    <table tableName="nole205_favorate_label" domainObjectName="Nole205FavorateLabel" schema="root" delimitAllColumns="true">
+    <generatedKey column="nole205_id" sqlStatement="MySql" identity="true" />
+    <columnRenamingRule searchString="nole205_id" replaceString="id"/></table>
+
+    <table tableName="nole206_message" domainObjectName="Nole206Message" schema="root" delimitAllColumns="true">
+    <generatedKey column="nole206_id" sqlStatement="MySql" identity="true" />
+    <columnRenamingRule searchString="nole206_id" replaceString="id"/></table>
+
+    <table tableName="nole207_msgsend" domainObjectName="Nole207Msgsend" schema="root" delimitAllColumns="true">
+    <generatedKey column="nole207_id" sqlStatement="MySql" identity="true" />
+    <columnRenamingRule searchString="nole207_id" replaceString="id"/></table>
+
+    <table tableName="nole300_activity_type" domainObjectName="Nole300ActivityType" schema="root" delimitAllColumns="true">
+    <generatedKey column="nole300_id" sqlStatement="MySql" identity="true" />
+    <columnRenamingRule searchString="nole300_id" replaceString="id"/></table>
+
+    <table tableName="nole301_activity" domainObjectName="Nole301Activity" schema="root" delimitAllColumns="true">
+    <generatedKey column="nole301_id" sqlStatement="MySql" identity="true" />
+    <columnRenamingRule searchString="nole301_id" replaceString="id"/></table>
+
+    <table tableName="nole302_activity_status" domainObjectName="Nole302ActivityStatus" schema="root" delimitAllColumns="true">
+    <generatedKey column="nole302_id" sqlStatement="MySql" identity="true" />
+    <columnRenamingRule searchString="nole302_id" replaceString="id"/></table>
+
+    <table tableName="nole303_activity_pic" domainObjectName="Nole303ActivityPic" schema="root" delimitAllColumns="true">
+    <generatedKey column="nole303_id" sqlStatement="MySql" identity="true" />
+    <columnRenamingRule searchString="nole303_id" replaceString="id"/></table>
+
+    <table tableName="nole304_activity_version" domainObjectName="Nole304ActivityVersion" schema="root" delimitAllColumns="true">
+    <generatedKey column="nole304_id" sqlStatement="MySql" identity="true" />
+    <columnRenamingRule searchString="nole304_id" replaceString="id"/></table>
+
+    <table tableName="nole305_activity_schedule" domainObjectName="Nole305ActivitySchedule" schema="root" delimitAllColumns="true">
+    <generatedKey column="nole305_id" sqlStatement="MySql" identity="true" />
+    <columnRenamingRule searchString="nole305_id" replaceString="id"/></table>
+
+    <table tableName="nole308_vote" domainObjectName="Nole308Vote" schema="root" delimitAllColumns="true">
+    <generatedKey column="nole308_id" sqlStatement="MySql" identity="true" />
+    <columnRenamingRule searchString="nole308_id" replaceString="id"/></table>
+
+    <table tableName="nole309_activity_apply" domainObjectName="Nole309ActivityApply" schema="root" delimitAllColumns="true">
+    <generatedKey column="nole309_id" sqlStatement="MySql" identity="true" />
+    <columnRenamingRule searchString="nole309_id" replaceString="id"/></table>
+
+    <table tableName="nole310_recommend_people" domainObjectName="Nole310RecommendPeople" schema="root" delimitAllColumns="true">
+    <generatedKey column="nole310_id" sqlStatement="MySql" identity="true" />
+    <columnRenamingRule searchString="nole310_id" replaceString="id"/></table>
+
+    <table tableName="nole311_recommend_car" domainObjectName="Nole311RecommendCar" schema="root" delimitAllColumns="true">
+    <generatedKey column="nole311_id" sqlStatement="MySql" identity="true" />
+    <columnRenamingRule searchString="nole311_id" replaceString="id"/></table>
+
+    <table tableName="nole312_recommend_equip" domainObjectName="Nole312RecommendEquip" schema="root" delimitAllColumns="true">
+    <generatedKey column="nole312_id" sqlStatement="MySql" identity="true" />
+    <columnRenamingRule searchString="nole312_id" replaceString="id"/></table>
+
+    <table tableName="nole400_line" domainObjectName="Nole400Line" schema="root" delimitAllColumns="true">
+    <generatedKey column="nole400_id" sqlStatement="MySql" identity="true" />
+    <columnRenamingRule searchString="nole400_id" replaceString="id"/></table>
+
+    <table tableName="nole401_wanto" domainObjectName="Nole401Wanto" schema="root" delimitAllColumns="true">
+    <generatedKey column="nole401_id" sqlStatement="MySql" identity="true" />
+    <columnRenamingRule searchString="nole401_id" replaceString="id"/></table>
+
+    <table tableName="nole402_fit" domainObjectName="Nole402Fit" schema="root" delimitAllColumns="true">
+    <generatedKey column="nole402_id" sqlStatement="MySql" identity="true" />
+    <columnRenamingRule searchString="nole402_id" replaceString="id"/></table>
+
+    <table tableName="nole403_line_schedule" domainObjectName="Nole403LineSchedule" schema="root" delimitAllColumns="true">
+    <generatedKey column="nole403_id" sqlStatement="MySql" identity="true" />
+    <columnRenamingRule searchString="nole403_id" replaceString="id"/></table>
+
+    <table tableName="nole404_pics" domainObjectName="Nole404Pics" schema="root" delimitAllColumns="true">
+    <generatedKey column="nole404_id" sqlStatement="MySql" identity="true" />
+    <columnRenamingRule searchString="nole404_id" replaceString="id"/></table>
+
+    <table tableName="nole405_recommend_people" domainObjectName="Nole405RecommendPeople" schema="root" delimitAllColumns="true">
+    <generatedKey column="nole405_id" sqlStatement="MySql" identity="true" />
+    <columnRenamingRule searchString="nole405_id" replaceString="id"/></table>
+
+    <table tableName="nole406_recommend_car" domainObjectName="Nole406RecommendCar" schema="root" delimitAllColumns="true">
+    <generatedKey column="nole406_id" sqlStatement="MySql" identity="true" />
+    <columnRenamingRule searchString="nole406_id" replaceString="id"/></table>
+
+    <table tableName="nole407_recommend_equip" domainObjectName="Nole407RecommendEquip" schema="root" delimitAllColumns="true">
+    <generatedKey column="nole407_id" sqlStatement="MySql" identity="true" />
+    <columnRenamingRule searchString="nole407_id" replaceString="id"/></table>
+
+    <table tableName="nole408_footprint" domainObjectName="Nole408Footprint" schema="root" delimitAllColumns="true">
+    <generatedKey column="nole408_id" sqlStatement="MySql" identity="true" />
+    <columnRenamingRule searchString="nole408_id" replaceString="id"/></table>
+
+    <table tableName="nole500_order" domainObjectName="Nole500Order" schema="root" delimitAllColumns="true">
+    <generatedKey column="nole500_id" sqlStatement="MySql" identity="true" />
+    <columnRenamingRule searchString="nole500_id" replaceString="id"/></table>
+
+    <table tableName="nole501_order_status" domainObjectName="Nole501OrderStatus" schema="root" delimitAllColumns="true">
+    <generatedKey column="nole501_id" sqlStatement="MySql" identity="true" />
+    <columnRenamingRule searchString="nole501_id" replaceString="id"/></table>
+
+  </context>
+</generatorConfiguration>
